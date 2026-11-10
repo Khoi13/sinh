@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luyện Tập Trả Lời Ngắn Sinh Học</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f1f5f9;
+            color: #334155;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            margin-top: 2vh;
+        }
+        /* Controls Header (Tabs + Shuffle) */
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .tab-btn {
+            background-color: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background-color: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+        .tab-btn:hover:not(.active) {
+            background-color: #e2e8f0;
+        }
+        .btn-shuffle {
+            background-color: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-shuffle:hover { background-color: #7c3aed; }
+        .btn-shuffle:active { transform: scale(0.95); }
+
+        /* Common CSS */
+        .q-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2563eb;
+            background-color: #dbeafe;
+            padding: 5px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .q-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #cbd5e1;
+            padding: 10px;
+            text-align: center;
+        }
+        th, .table-header {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            border-color: #2563eb;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            white-space: nowrap;
+        }
+        button:active { transform: scale(0.98); }
+        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-secondary { background-color: #e2e8f0; color: #475569; }
+        .btn-secondary:hover { background-color: #cbd5e1; }
+        .btn-warning { background-color: #f59e0b; color: white; }
+        .btn-warning:hover { background-color: #d97706; }
+        
+        .feedback {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            display: none;
+        }
+        .correct { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
+        .incorrect { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .revealed { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+
+        /* Single Mode CSS */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap; /* Tránh vỡ layout trên điện thoại */
+        }
+        .input-group input {
+            flex: 1;
+            min-width: 200px;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        /* All Mode CSS */
+        .q-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .global-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header: Tabs và Đảo câu hỏi -->
+    <div class="controls-header">
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-single" onclick="switchMode('single')">🎯 Luyện Từng Câu</button>
+            <button class="tab-btn" id="tab-all" onclick="switchMode('all')">📜 Xem Toàn Bộ</button>
+        </div>
+        <button class="btn-shuffle" onclick="shuffleQuestions()">🔀 Đảo Câu Hỏi</button>
+    </div>
+
+    <!-- ==================== CHẾ ĐỘ TỪNG CÂU ==================== -->
+    <div id="mode-single">
+        <div class="q-number" id="single-counter">Câu 1 / 10</div>
+        <div class="q-text" id="single-text"></div>
+
+        <div class="input-group">
+            <input type="text" id="single-input" placeholder="Nhập đáp án của bạn...">
+            <button class="btn-primary" onclick="checkSingle()">Kiểm tra</button>
+            <button class="btn-warning" onclick="revealSingle()">👁️ Mở đáp án</button>
+        </div>
+
+        <div class="feedback" id="single-feedback"></div>
+
+        <div class="navigation">
+            <button class="btn-secondary" id="btn-prev" onclick="prevQuestion()">❮ Câu trước</button>
+            <button class="btn-secondary" id="btn-next" onclick="nextQuestion()">Câu tiếp ❯</button>
+        </div>
+    </div>
+
+    <!-- ==================== CHẾ ĐỘ TOÀN BỘ ==================== -->
+    <div id="mode-all" style="display: none;">
+        <div id="all-questions-list">
+            <!-- Render bằng JS -->
+        </div>
+
+        <div class="global-actions">
+            <button class="btn-primary" onclick="checkAll()">📝 Kiểm tra tất cả</button>
+            <button class="btn-warning" onclick="revealAll()">👁️ Mở toàn bộ đáp án</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu câu hỏi
+    let DATA = [
+        { question: "Một gene ở sinh vật nhân thực dài 408nm và gồm 3200 liên kết H. Gene này bị đột biến thay thế 1 cặp A – T bằng 1 cặp G- C. Số nu loại T của gene sau đột biến là bao nhiêu?", answer: "399" },
+        { question: "Gene A dài 306 nm, có 20% nucleotide loại Adenine. Gene A bị đột biến thành allele a. Allele a bị đột biến thành Allele a1. Allele a1 bị đột biến thành Allele a2. Cho biết đột biến chỉ liên quan đến 1 cặp nucleotide. Số liên kết hydrogen của gene A ít hơn so với allele a là 1, nhiều hơn so với số liên kết hydrogen của allele a1 là 2 và nhiều hơn so với allele a2 là 1. Tính tổng số nucleotide loại G của cơ thể mang kiểu gene Aaa1a2?", answer: "2162" },
+        { question: "Ở 1 loài động vật, xét 1 gene trên NST thường có 2 Allele, Allele A trội hoàn toàn so với Allele đột biến a. Giả sử ở 1 phép lai, trong trong số giao tử đực, giao tử mang Allele a chiếm 5%. Trong tổng số giao tử cái, giao tử mang allele a chiếm 10%. Theo lí thuyết, trong tổng số cá thể mang allele đột biến ở đời con, thể đột biến chiếm tỉ lệ bao nhiêu %?", answer: "3,45" },
+        { question: "Ở 1 sinh vật nhân sơ, đoạn đầu gene cấu trúc có trình tự các nu trên mạch bổ sung là:<br><br><strong>5’ …ATG  TCC  TAC  TCT  ATT  CTA  GCG  GTC  AAT ..3’</strong><br><br>Tác nhân đột biến làm mất cặp nu thứ 16 G - C thì phân tử protein tương ứng được tổng hợp từ gene đột biến có số amino acid là bao nhiêu?", answer: "4" },
+        { question: `Cho biết các codon mã hóa một số loại amino acid như sau:
+            <table>
+                <tr>
+                    <td class="table-header">Codon</td>
+                    <td>5’GAU3’; 5’GAC3’</td>
+                    <td>5’UAU3’; 5’UAC3’</td>
+                    <td>5’AGU3’; 5’AGC3’</td>
+                    <td>5’CAU3’; 5’CAC3’</td>
+                </tr>
+                <tr>
+                    <td class="table-header">Amino acid</td>
+                    <td>Asp</td>
+                    <td>Tyr</td>
+                    <td>Ser</td>
+                    <td>His</td>
+                </tr>
+            </table>
+            Một đoạn mạch làm khuôn tổng hợp mRNA của Allele M có trình tự nucleotide là 3’TAC CTA GTA ATG TCA…ATC5’. Allele M bị đột biến điểm tạo ra 4 Allele có trình tự nucleotide ở đoạn mạch này như sau:<br><br>
+            <strong>Allele M1:</strong> 3’TAC CTG GTA ATG TCA…ATC5’.<br>
+            <strong>Allele M2:</strong> 3’TAC CTA GTG ATG TCA…ATC5’.<br>
+            <strong>Allele M3:</strong> 3’TAC CTA GTA GTG TCA…ATC5’.<br>
+            <strong>Allele M4:</strong> 3’TAC CTA GTA ATG TCG…ATC5’.<br><br>
+            Theo lý thuyết, trong 4 Allele trên, có bao nhiêu Allele mã hóa chuỗi polipeptide có thành phần amino acid bị thay đổi so với chuỗi polipeptide do Allele M mã hóa?`, answer: "1" },
+        { question: "Đường kính của mỗi chromatid là bao nhiêu?", answer: "700" },
+        { question: "Mỗi nucleosome gồm bao nhiêu phân tử protein dạng histon?", answer: "8" },
+        { question: "Mỗi nucleosome quấn quanh một phân tử DNA gồm bao nhiêu cặp nucleotide?", answer: "146" },
+        { question: "Bộ NST lưỡng bội của loài được kí hiệu là gì?", answer: "2n" },
+        { question: "Mỗi phân tử protein condensin II và condensin I có khả năng gây co xoắn ở sợi nhiễm sắc có đường kính bao nhiêu?", answer: "10 nm" }
+    ];
+
+    // ==========================================
+    // LOGIC CHUNG
+    // ==========================================
+    function normalizeText(text) {
+        return text.trim().toLowerCase().replace(/\s+/g, '').replace(/,/g, '.');
+    }
+
+    function checkLogic(userAns, correctAns) {
+        if (userAns.trim() === "") return "empty";
+        const normUser = normalizeText(userAns);
+        const normCorrect = normalizeText(correctAns);
+        if (normUser === normCorrect || normCorrect.startsWith(normUser + 'nm')) return "correct";
+        return "incorrect";
+    }
+
+    function switchMode(mode) {
+        document.getElementById('tab-single').classList.toggle('active', mode === 'single');
+        document.getElementById('tab-all').classList.toggle('active', mode === 'all');
+        
+        document.getElementById('mode-single').style.display = mode === 'single' ? 'block' : 'none';
+        document.getElementById('mode-all').style.display = mode === 'all' ? 'block' : 'none';
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function shuffleQuestions() {
+        if (confirm("Việc đảo câu hỏi sẽ làm mới lại toàn bộ quá trình làm bài hiện tại. Bạn có chắc chắn muốn tiếp tục?")) {
+            shuffleArray(DATA);
+            currentIndex = 0;
+            renderSingle();
+            renderAll();
+        }
+    }
+
+    // ==========================================
+    // LOGIC CHẾ ĐỘ TỪNG CÂU
+    // ==========================================
+    let currentIndex = 0;
+
+    function renderSingle() {
+        const q = DATA[currentIndex];
+        document.getElementById('single-counter').innerText = `Câu ${currentIndex + 1} / ${DATA.length}`;
+        document.getElementById('single-text').innerHTML = q.question;
+        
+        // Khôi phục trạng thái mặc định của ô input
+        const input = document.getElementById('single-input');
+        input.value = '';
+        input.disabled = false;
+        input.style.backgroundColor = ""; 
+        
+        document.getElementById('single-feedback').style.display = 'none';
+        
+        document.getElementById('btn-prev').disabled = (currentIndex === 0);
+        document.getElementById('btn-next').disabled = (currentIndex === DATA.length - 1);
+    }
+
+    function checkSingle() {
+        const userAns = document.getElementById('single-input').value;
+        const correctAns = DATA[currentIndex].answer;
+        const feedback = document.getElementById('single-feedback');
+        
+        const status = checkLogic(userAns, correctAns);
+
+        if (status === "empty") {
+            feedback.className = "feedback incorrect";
+            feedback.innerHTML = "⚠️ Vui lòng nhập đáp án của bạn!";
+        } else if (status === "correct") {
+            feedback.className = "feedback correct";
+            feedback.innerHTML = `✅ Chính xác! Đáp án đúng là <b>${correctAns}</b>`;
+        } else {
+            feedback.className = "feedback incorrect";
+            feedback.innerHTML = `❌ Chưa chính xác.`;
+        }
+        feedback.style.display = "block";
+    }
+
+    function revealSingle() {
+        const q = DATA[currentIndex];
+        const input = document.getElementById('single-input');
+        const feedback = document.getElementById('single-feedback');
+
+        // Hiển thị đáp án trực tiếp vào ô input và đổi màu
+        input.value = q.answer;
+        input.style.backgroundColor = "#fef9c3";
+        input.disabled = true; // Khóa ô nhập
+
+        feedback.className = "feedback revealed";
+        feedback.innerHTML = `👁️ Đáp án: <b>${q.answer}</b>`;
+        feedback.style.display = "block";
+    }
+
+    function nextQuestion() {
+        if (currentIndex < DATA.length - 1) { currentIndex++; renderSingle(); }
+    }
+    function prevQuestion() {
+        if (currentIndex > 0) { currentIndex--; renderSingle(); }
+    }
+    document.getElementById("single-input").addEventListener("keypress", e => {
+        if (e.key === "Enter") checkSingle();
+    });
+
+    // ==========================================
+    // LOGIC CHẾ ĐỘ TOÀN BỘ
+    // ==========================================
+    function renderAll() {
+        const list = document.getElementById('all-questions-list');
+        list.innerHTML = "";
+        
+        DATA.forEach((q, index) => {
+            list.innerHTML += `
+                <div class="q-item">
+                    <div class="q-number">Câu ${index + 1}</div>
+                    <div class="q-text">${q.question}</div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="all-input-${index}" placeholder="Nhập đáp án...">
+                    </div>
+                    <div class="feedback" id="all-feedback-${index}"></div>
+                </div>
+            `;
+        });
+    }
+
+    function checkAll() {
+        DATA.forEach((q, index) => {
+            const input = document.getElementById(`all-input-${index}`);
+            const feedback = document.getElementById(`all-feedback-${index}`);
+            const status = checkLogic(input.value, q.answer);
+
+            if (status === "empty") {
+                feedback.style.display = "none"; 
+            } else if (status === "correct") {
+                feedback.className = "feedback correct";
+                feedback.innerHTML = `✅ Chính xác!`;
+                feedback.style.display = "block";
+            } else {
+                feedback.className = "feedback incorrect";
+                feedback.innerHTML = `❌ Sai. Đáp án đúng là: <b>${q.answer}</b>`;
+                feedback.style.display = "block";
+            }
+        });
+    }
+
+    function revealAll() {
+        if(confirm("Bạn có chắc chắn muốn xem toàn bộ đáp án? Các câu chưa làm sẽ hiển thị đáp án.")) {
+            DATA.forEach((q, index) => {
+                const input = document.getElementById(`all-input-${index}`);
+                const feedback = document.getElementById(`all-feedback-${index}`);
+                
+                input.value = q.answer;
+                input.style.backgroundColor = "#fef9c3";
+                input.disabled = true;
+
+                feedback.className = "feedback revealed";
+                feedback.innerHTML = `👁️ Đáp án: <b>${q.answer}</b>`;
+                feedback.style.display = "block";
+            });
+        }
+    }
+
+    // Khởi tạo
+    renderSingle();
+    renderAll();
+</script>
+
+</body>
+</html>
