@@ -140,8 +140,8 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(17, 24, 39, 0.5);
-            z-index: 190;
+            background: rgba(17, 24, 39, 0.55);
+            z-index: 998;
         }
 
         .sidebar-backdrop.show {
@@ -157,62 +157,6 @@
             grid-template-columns: 1fr 310px;
             gap: 20px;
             align-items: start;
-        }
-
-        @media (max-width: 960px) {
-            header {
-                padding: 10px 14px;
-                gap: 8px;
-            }
-
-            .brand {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .controls button,
-            .mode-btn {
-                padding: 6px 10px;
-                font-size: 0.82rem;
-            }
-
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .mobile-nav-toggle {
-                display: inline-flex;
-                align-items: center;
-                gap: 6px;
-                background: #ecfdf5;
-                color: var(--primary-dark);
-                border-color: var(--primary);
-            }
-
-            .mobile-close-btn {
-                display: inline-block;
-                padding: 4px 10px;
-                font-size: 0.82rem;
-                background: #fee2e2;
-                color: #b91c1c;
-                border-color: #fecaca;
-            }
-
-            .sidebar {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: min(92vw, 380px);
-                max-height: 82vh;
-                z-index: 200;
-                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
-            }
-
-            .sidebar.open {
-                display: block;
-            }
         }
 
         /* Section Tabs */
@@ -454,7 +398,7 @@
             color: #dc2626;
         }
 
-        /* Sidebar Navigator */
+        /* Sidebar Navigator (Desktop default) */
         .sidebar {
             background: var(--card);
             border-radius: 12px;
@@ -626,6 +570,63 @@
 
         sub {
             bottom: -0.25em;
+        }
+
+        /* Responsive Mobile (Đặt cuối để ghi đè đúng thuộc tính của .sidebar) */
+        @media (max-width: 960px) {
+            header {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+
+            .brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .controls button,
+            .mode-btn {
+                padding: 6px 10px;
+                font-size: 0.82rem;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #ecfdf5;
+                color: var(--primary-dark);
+                border-color: var(--primary);
+            }
+
+            .mobile-close-btn {
+                display: inline-block;
+                padding: 4px 10px;
+                font-size: 0.82rem;
+                background: #fee2e2;
+                color: #b91c1c;
+                border-color: #fecaca;
+            }
+
+            .sidebar {
+                display: none;
+                position: fixed !important;
+                top: 50% !important;
+                left: 50% !important;
+                transform: translate(-50%, -50%) !important;
+                width: min(92vw, 380px);
+                max-height: 80vh;
+                z-index: 999;
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+            }
+
+            .sidebar.open {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -1329,18 +1330,18 @@
                 items: [
                     { text: "Các cây hoa đỏ có 4 loại kiểu gene.", ans: true },
                     { text: "Các cây hoa đỏ thuần chủng có 1 loại kiểu gene.", ans: true },
-                    { text: "Các cây hoa trắng có 7 loại kiểu gene.", ans: false }, // 5 loại kiểu gene (AAbb, Aabb, aaBB, aaBb, aabb)
-                    { text: "Các cây hoa trắng thuần chủng có 2 loại kiểu gene.", ans: false } // 3 loại kiểu gene (AAbb, aaBB, aabb)
+                    { text: "Các cây hoa trắng có 7 loại kiểu gene.", ans: false },
+                    { text: "Các cây hoa trắng thuần chủng có 2 loại kiểu gene.", ans: false }
                 ]
             },
             {
                 id: "tf_5", type: "tf", origNum: "Câu 5 (Đ/S)",
                 q: "Ở một loài thực vật, tính trạng màu hoa do ba cặp gene phân li độc lập cùng quy định. Khi trong kiểu gene có đồng thời cả 3 loại allele trội A, B, D thì hoa có màu đỏ, kiểu gene có hai loại allele trội A và B nhưng không có allele trội D quy định hoa vàng, các kiểu gene còn lại đều quy định hoa trắng. Theo lí thuyết, mỗi dự đoán dưới đây đúng hay sai?",
                 items: [
-                    { text: "Có tối đa 15 loại kiểu gene quy định kiểu hình hoa trắng.", ans: true }, // 27 - 8(đỏ) - 4(vàng) = 15
-                    { text: "Cây hoa đỏ dị hợp tử về cả ba cặp gene tự thụ phấn, tạo ra đời con có số cây hoa trắng chiếm tỉ lệ 9/16.", ans: false }, // 1 - 27/64 - 9/64 = 28/64 = 7/16
-                    { text: "Cho một cây hoa đỏ giao phấn với một cây hoa trắng có thể thu được đời con có tỉ lệ kiểu hình là: 6 cây hoa trắng : 1 cây hoa đỏ : 1 cây hoa vàng.", ans: true }, // Vd: AaBbDd x aabbdd -> 1/8 đỏ : 1/8 vàng : 6/8 trắng
-                    { text: "Cho cây hoa trắng thuần chủng giao phấn với cây hoa vàng thuần chủng, luôn thu được đời con gồm toàn cây hoa vàng.", ans: false } // Vd: aabbDD (trắng) x AABBdd (vàng) -> AaBbDd (100% đỏ)
+                    { text: "Có tối đa 15 loại kiểu gene quy định kiểu hình hoa trắng.", ans: true },
+                    { text: "Cây hoa đỏ dị hợp tử về cả ba cặp gene tự thụ phấn, tạo ra đời con có số cây hoa trắng chiếm tỉ lệ 9/16.", ans: false },
+                    { text: "Cho một cây hoa đỏ giao phấn với một cây hoa trắng có thể thu được đời con có tỉ lệ kiểu hình là: 6 cây hoa trắng : 1 cây hoa đỏ : 1 cây hoa vàng.", ans: true },
+                    { text: "Cho cây hoa trắng thuần chủng giao phấn với cây hoa vàng thuần chủng, luôn thu được đời con gồm toàn cây hoa vàng.", ans: false }
                 ]
             },
             {
@@ -1348,29 +1349,29 @@
                 q: "Ở một loài thực vật, màu sắc hoa là do sự tác động của hai cặp gene (A, a và B, b) phân li độc lập. Gene A và gene B tác động đến sự hình thành màu sắc hoa theo sơ đồ:\n[Sơ đồ chuyển hóa: Chất 1 (không màu) → Chất 2 (không màu) → Sắc tố đỏ]\nCác allele a và b không có chức năng trên. Cho các cây dị hợp về 2 cặp gene tự thụ phấn thu được F<sub>1</sub>. Theo lí thuyết, mỗi nhận định dưới đây là đúng hay sai?",
                 items: [
                     { text: "Trong số các cây hoa đỏ ở F<sub>1</sub> thì cây thuần chủng chiếm tỉ lệ 1/9.", ans: true },
-                    { text: "Các cây hoa trắng ở F<sub>1</sub> chiếm tỉ lệ 7/9.", ans: false }, // 7/16
-                    { text: "Tỉ lệ số cây hoa đỏ thuần chủng luôn lớn hơn số cây hoa trắng thuần chủng.", ans: false }, // Đỏ TC (1/16) < Trắng TC (3/16)
-                    { text: "Chọn ngẫu nhiên một cây hoa trắng ở F<sub>1</sub>; xác suất lấy được cây thuần chủng là 1/4.", ans: false } // 3/7
+                    { text: "Các cây hoa trắng ở F<sub>1</sub> chiếm tỉ lệ 7/9.", ans: false },
+                    { text: "Tỉ lệ số cây hoa đỏ thuần chủng luôn lớn hơn số cây hoa trắng thuần chủng.", ans: false },
+                    { text: "Chọn ngẫu nhiên một cây hoa trắng ở F<sub>1</sub>; xác suất lấy được cây thuần chủng là 1/4.", ans: false }
                 ]
             },
             {
                 id: "tf_21", type: "tf", origNum: "Câu 21 (Đ/S)",
                 q: "Một loài thực vật, allele A quy định thân cao trội hoàn toàn so với allele a quy định thân thấp; allele B quy định hoa đỏ trội không hoàn toàn so với allele b quy định hoa trắng, kiểu gene Bb quy định hoa hồng; hai cặp gene này phân li độc lập. Cho cây thân cao, hoa trắng giao phấn với cây thân thấp, hoa đỏ (P), thu được F<sub>1</sub> gồm 100% cây thân cao, hoa hồng. Cho F<sub>1</sub> tự thụ phấn, thu được F<sub>2</sub>. Biết rằng không xảy ra đột biến. Theo lí thuyết, mỗi phát biểu dưới đây đúng hay sai?",
                 items: [
-                    { text: "F<sub>2</sub> có 1 loại kiểu gene quy định kiểu hình thân cao, hoa hồng.", ans: false }, // 2 loại: AABb, AaBb
-                    { text: "Trong tổng số cây thân cao, hoa đỏ ở F<sub>2</sub>, số cây thuần chủng chiếm 25%.", ans: false }, // AABB / (AABB + AaBB) = 1/3 = 33,33%
-                    { text: "F<sub>2</sub> có 18,75% số cây thân cao, hoa trắng.", ans: true }, // 3/4 * 1/4 = 3/16 = 18,75%
-                    { text: "F<sub>2</sub> có 12,5% số cây thân thấp, hoa hồng.", ans: true } // 1/4 * 2/4 = 2/16 = 12,5%
+                    { text: "F<sub>2</sub> có 1 loại kiểu gene quy định kiểu hình thân cao, hoa hồng.", ans: false },
+                    { text: "Trong tổng số cây thân cao, hoa đỏ ở F<sub>2</sub>, số cây thuần chủng chiếm 25%.", ans: false },
+                    { text: "F<sub>2</sub> có 18,75% số cây thân cao, hoa trắng.", ans: true },
+                    { text: "F<sub>2</sub> có 12,5% số cây thân thấp, hoa hồng.", ans: true }
                 ]
             },
             {
                 id: "tf_24", type: "tf", origNum: "Câu 24 (Đ/S)",
                 q: "Ở một loài thực vật lưỡng bội, xét 2 cặp gene (A, a; B, b) phân li độc lập cùng quy định màu sắc hoa. Kiểu gene có cả hai loại allele trội A và B cho kiểu hình hoa đỏ, kiểu gene chỉ có một loại allele trội A cho kiểu hình hoa vàng, các kiểu gene còn lại cho kiểu hình hoa trắng. Cho cây hoa đỏ (P) tự thụ phấn, thu được F<sub>1</sub> gồm 3 loại kiểu hình. Biết rằng không xảy ra đột biến, sự biểu hiện của gene không phụ thuộc vào môi trường. Theo lí thuyết, mỗi kết luận dưới đây đúng hay sai?",
                 items: [
-                    { text: "Số cây hoa trắng có kiểu gene dị hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true }, // P: AaBb -> hoa trắng: 1/16 aaBB, 2/16 aaBb, 1/16 aabb -> dị hợp = 2/16 = 12,5%
-                    { text: "Số cây hoa trắng có kiểu gene đồng hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true }, // aaBB (1/16) + aabb (1/16) = 2/16 = 12,5%
-                    { text: "F<sub>1</sub> có 4 loại kiểu gene quy định kiểu hình hoa trắng.", ans: false }, // 3 loại kiểu gene: aaBB, aaBb, aabb
-                    { text: "Trong các cây hoa trắng ở F<sub>1</sub>, cây hoa trắng đồng hợp tử chiếm 25%.", ans: false } // 2/4 = 50%
+                    { text: "Số cây hoa trắng có kiểu gene dị hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true },
+                    { text: "Số cây hoa trắng có kiểu gene đồng hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true },
+                    { text: "F<sub>1</sub> có 4 loại kiểu gene quy định kiểu hình hoa trắng.", ans: false },
+                    { text: "Trong các cây hoa trắng ở F<sub>1</sub>, cây hoa trắng đồng hợp tử chiếm 25%.", ans: false }
                 ]
             },
             {
@@ -1387,10 +1388,10 @@
                 id: "tf_g55", type: "tf", origNum: "Câu 55 (Đ/S - GT)",
                 q: "Ở gà, gene quy định màu sắc lông nằm trên vùng không tương đồng của nhiễm sắc thể giới tính X (ở chim: trống XX, mái XY) có hai allele: allele A quy định lông vàng trội hoàn toàn so với allele a quy định lông đen. Cho gà trống lông vàng thuần chủng giao phối với gà mái lông đen thu được F<sub>1</sub>. Cho F<sub>1</sub> giao phối với nhau thu được F<sub>2</sub>. Theo lí thuyết, mỗi kết luận dưới đây về kiểu gene và kiểu hình ở F<sub>2</sub> đúng hay sai?",
                 items: [
-                    { text: "Gà trống lông vàng có tỉ lệ gấp đôi gà mái lông đen.", ans: true }, // F2: 1 XAXA : 1 XAXa (2/4 trống vàng) : 1 XAY (1/4 mái vàng) : 1 XaY (1/4 mái đen)
+                    { text: "Gà trống lông vàng có tỉ lệ gấp đôi gà mái lông đen.", ans: true },
                     { text: "Gà trống lông vàng có tỉ lệ gấp đôi gà mái lông vàng.", ans: true },
                     { text: "Tất cả các gà lông đen đều là gà mái.", ans: true },
-                    { text: "Gà lông vàng và gà lông đen có tỉ lệ bằng nhau.", ans: false } // 3 vàng : 1 đen
+                    { text: "Gà lông vàng và gà lông đen có tỉ lệ bằng nhau.", ans: false }
                 ]
             },
 
