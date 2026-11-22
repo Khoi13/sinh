@@ -130,6 +130,24 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
+        /* Mobile Sidebar Toggle & Overlay */
+        .mobile-nav-toggle,
+        .mobile-close-btn {
+            display: none;
+        }
+
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.5);
+            z-index: 190;
+        }
+
+        .sidebar-backdrop.show {
+            display: block;
+        }
+
         /* Layout */
         .container {
             max-width: 1280px;
@@ -142,12 +160,58 @@
         }
 
         @media (max-width: 960px) {
+            header {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+
+            .brand {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .controls button,
+            .mode-btn {
+                padding: 6px 10px;
+                font-size: 0.82rem;
+            }
+
             .container {
                 grid-template-columns: 1fr;
             }
 
+            .mobile-nav-toggle {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                background: #ecfdf5;
+                color: var(--primary-dark);
+                border-color: var(--primary);
+            }
+
+            .mobile-close-btn {
+                display: inline-block;
+                padding: 4px 10px;
+                font-size: 0.82rem;
+                background: #fee2e2;
+                color: #b91c1c;
+                border-color: #fecaca;
+            }
+
             .sidebar {
-                order: -1;
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: min(92vw, 380px);
+                max-height: 82vh;
+                z-index: 200;
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            }
+
+            .sidebar.open {
+                display: block;
             }
         }
 
@@ -182,7 +246,7 @@
             margin-bottom: 16px;
             border: 1px solid var(--border);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-            scroll-margin-top: 90px;
+            scroll-margin-top: 130px;
         }
 
         .q-header {
@@ -568,7 +632,12 @@
 <body>
 
     <header>
-        <div class="brand">🧬 Luyện Tập Sinh Học 12</div>
+        <div class="brand">
+            <span>🧬 Luyện Tập Sinh Học 12</span>
+            <button type="button" class="mobile-nav-toggle" onclick="toggleMobileSidebar()">
+                📋 Bảng câu hỏi (<span id="mobileProgressText">0/0</span>)
+            </button>
+        </div>
         <div class="controls">
             <div class="mode-group">
                 <button class="mode-btn active" id="btnModePractice" onclick="setMode('practice')">Chế độ Luyện
@@ -581,6 +650,8 @@
             <button class="btn-primary" id="btnSubmitAll" onclick="submitExam()">Nộp bài & Chấm điểm</button>
         </div>
     </header>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeMobileSidebar()"></div>
 
     <div class="container">
         <main>
@@ -600,7 +671,7 @@
             <div id="quizContainer"></div>
         </main>
 
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebarPanel">
             <div class="timer-box" id="timerBox" style="display:none;">
                 <div style="font-size:0.8rem; color:#9ca3af; margin-bottom:2px;">THỜI GIAN LÀM BÀI</div>
                 <div class="timer-display" id="timerDisplay">45:00</div>
@@ -612,9 +683,12 @@
                 </div>
             </div>
 
-            <div style="font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between;">
+            <div style="font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
                 <span>Bảng quản lý câu hỏi</span>
-                <span id="progressText" style="color:var(--primary-dark);">0/0</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span id="progressText" style="color:var(--primary-dark);">0/0</span>
+                    <button type="button" class="mobile-close-btn" onclick="closeMobileSidebar()">✕ Đóng</button>
+                </div>
             </div>
 
             <div class="legend">
@@ -1366,6 +1440,19 @@
             renderAll();
         }
 
+        // Đóng/Mở bảng câu hỏi trên Mobile
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById("sidebarPanel");
+            const backdrop = document.getElementById("sidebarBackdrop");
+            const isOpen = sidebar.classList.toggle("open");
+            backdrop.classList.toggle("show", isOpen);
+        }
+
+        function closeMobileSidebar() {
+            document.getElementById("sidebarPanel").classList.remove("open");
+            document.getElementById("sidebarBackdrop").classList.remove("show");
+        }
+
         // Chuyển đổi chế độ
         function setMode(newMode) {
             mode = newMode;
@@ -1557,6 +1644,7 @@
         function submitExam() {
             examSubmitted = true;
             stopTimer();
+            closeMobileSidebar();
             questions.forEach(q => checkedState[q.id] = true);
 
             let mcqOk = 0, mcqTotal = 0;
@@ -1783,9 +1871,11 @@
             document.getElementById("cntTf").textContent = cTf;
             document.getElementById("cntSa").textContent = cSa;
             document.getElementById("progressText").textContent = `${totalDone}/${questions.length} câu`;
+            document.getElementById("mobileProgressText").textContent = `${totalDone}/${questions.length}`;
         }
 
         function scrollToQuestion(qId, type) {
+            closeMobileSidebar();
             if (currentFilter !== "all" && currentFilter !== type) {
                 currentFilter = "all";
                 document.querySelectorAll(".part-tab").forEach((b, i) => b.classList.toggle("active", i === 0));
