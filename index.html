@@ -3,441 +3,1799 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luyện Tập Trả Lời Ngắn Sinh Học</title>
+    <title>Ôn Tập Sinh Học - Di Truyền Học</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f1f5f9;
-            color: #334155;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+        :root {
+            --primary: #10b981;
+            --primary-dark: #059669;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --flag-color: #f59e0b;
+        }
+
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header & Controls */
+        header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+
+        button,
+        select {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        button:hover {
+            background: #f9fafb;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            border-color: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-active {
+            background: #ecfdf5;
+            color: var(--primary-dark);
+            border-color: var(--primary);
+        }
+
+        /* Mode Switcher */
+        .mode-group {
+            display: flex;
+            background: #e5e7eb;
+            padding: 3px;
+            border-radius: 10px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 7px;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .mode-btn.active {
+            background: #fff;
+            color: var(--primary-dark);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Layout */
         .container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            margin-top: 2vh;
+            max-width: 1280px;
+            margin: 20px auto;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 1fr 310px;
+            gap: 20px;
+            align-items: start;
         }
-        /* Controls Header (Tabs + Shuffle) */
-        .controls-header {
+
+        @media (max-width: 960px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        /* Section Tabs */
+        .part-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .part-tab {
+            padding: 10px 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .part-tab.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        /* Question Cards */
+        .q-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+            scroll-margin-top: 90px;
+        }
+
+        .q-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        .tabs {
-            display: flex;
-            gap: 10px;
-        }
-        .tab-btn {
-            background-color: #f8fafc;
-            border: 2px solid #cbd5e1;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background-color: #eff6ff;
-            border-color: #3b82f6;
-            color: #1d4ed8;
-        }
-        .tab-btn:hover:not(.active) {
-            background-color: #e2e8f0;
-        }
-        .btn-shuffle {
-            background-color: #8b5cf6;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .btn-shuffle:hover { background-color: #7c3aed; }
-        .btn-shuffle:active { transform: scale(0.95); }
-
-        /* Common CSS */
-        .q-number {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2563eb;
-            background-color: #dbeafe;
-            padding: 5px 12px;
-            border-radius: 6px;
-            display: inline-block;
             margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
         }
+
+        .q-badge {
+            background: #ecfdf5;
+            color: var(--primary-dark);
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .flag-btn {
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .flag-btn.flagged {
+            background: #fef3c7;
+            color: #b45309;
+            border-color: var(--flag-color);
+        }
+
         .q-text {
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            font-size: 1.02rem;
+            margin-bottom: 14px;
+            font-weight: 500;
+            white-space: pre-line;
         }
-        table {
+
+        /* Image Box */
+        .img-box {
+            margin: 12px 0;
+            padding: 12px;
+            background: #f9fafb;
+            border: 1px dashed #9ca3af;
+            border-radius: 8px;
+        }
+
+        .img-box img {
+            max-width: 100%;
+            max-height: 280px;
+            display: block;
+            margin: 8px auto;
+            border-radius: 6px;
+        }
+
+        .img-input-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .img-input-row input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        /* MCQ Options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .opt-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .opt-item:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .opt-item.selected {
+            border-color: var(--primary);
+            background: #f0fdf4;
+        }
+
+        .opt-item.correct {
+            border-color: var(--correct-border);
+            background: var(--correct-bg);
+            font-weight: 600;
+        }
+
+        .opt-item.wrong {
+            border-color: var(--wrong-border);
+            background: var(--wrong-bg);
+        }
+
+        .opt-label {
+            font-weight: 700;
+            min-width: 24px;
+        }
+
+        /* True/False Table */
+        .tf-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 15px 0;
-            font-size: 14px;
+            margin-top: 8px;
         }
-        th, td {
-            border: 1px solid #cbd5e1;
+
+        .tf-table th,
+        .tf-table td {
+            border: 1px solid var(--border);
             padding: 10px;
+            text-align: left;
+        }
+
+        .tf-table th {
+            background: #f9fafb;
+            font-size: 0.9rem;
             text-align: center;
         }
-        th, .table-header {
-            background-color: #f8fafc;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s;
-            box-sizing: border-box;
-        }
-        input[type="text"]:focus {
-            border-color: #2563eb;
-        }
-        button {
-            padding: 12px 20px;
-            font-size: 15px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            white-space: nowrap;
-        }
-        button:active { transform: scale(0.98); }
-        .btn-primary { background-color: #2563eb; color: white; }
-        .btn-primary:hover { background-color: #1d4ed8; }
-        .btn-secondary { background-color: #e2e8f0; color: #475569; }
-        .btn-secondary:hover { background-color: #cbd5e1; }
-        .btn-warning { background-color: #f59e0b; color: white; }
-        .btn-warning:hover { background-color: #d97706; }
-        
-        .feedback {
-            margin-top: 10px;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 15px;
-            display: none;
-        }
-        .correct { background-color: #dcfce7; color: #166534; border: 1px solid #86efac; }
-        .incorrect { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        .revealed { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
 
-        /* Single Mode CSS */
-        .input-group {
+        .tf-table td:nth-child(2),
+        .tf-table td:nth-child(3) {
+            width: 70px;
+            text-align: center;
+        }
+
+        .tf-row.correct {
+            background: var(--correct-bg);
+        }
+
+        .tf-row.wrong {
+            background: var(--wrong-bg);
+        }
+
+        .tf-radio {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        /* Short Answer */
+        .sa-box {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap; /* Tránh vỡ layout trên điện thoại */
-        }
-        .input-group input {
-            flex: 1;
-            min-width: 200px;
-        }
-        .navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        /* All Mode CSS */
-        .q-item {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        .sa-input {
+            padding: 10px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 200px;
+            font-weight: 600;
         }
-        .global-actions {
+
+        .sa-input.correct {
+            border-color: var(--correct-border);
+            background: var(--correct-bg);
+        }
+
+        .sa-input.wrong {
+            border-color: var(--wrong-border);
+            background: var(--wrong-bg);
+        }
+
+        /* Instant Check Feedback */
+        .q-footer {
+            margin-top: 12px;
             display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .feedback-msg {
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .feedback-msg.ok {
+            color: var(--primary-dark);
+        }
+
+        .feedback-msg.err {
+            color: #dc2626;
+        }
+
+        /* Sidebar Navigator */
+        .sidebar {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid var(--border);
             position: sticky;
-            bottom: 0;
-            background: white;
-            padding-bottom: 10px;
+            top: 78px;
+            max-height: calc(100vh - 96px);
+            overflow-y: auto;
+        }
+
+        .timer-box {
+            background: #111827;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .timer-display {
+            font-size: 1.6rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .timer-controls button {
+            padding: 4px 8px;
+            font-size: 0.78rem;
+            background: #374151;
+            color: #fff;
+            border: none;
+        }
+
+        .timer-controls button:hover {
+            background: #4b5563;
+        }
+
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
+            color: var(--muted);
+        }
+
+        .legend span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            display: inline-block;
+            border: 1px solid #d1d5db;
+        }
+
+        .dot.done {
+            background: #3b82f6;
+            border-color: #2563eb;
+        }
+
+        .dot.flag {
+            background: #f59e0b;
+            border-color: #d97706;
+        }
+
+        .dot.ok {
+            background: #10b981;
+            border-color: #059669;
+        }
+
+        .dot.no {
+            background: #ef4444;
+            border-color: #dc2626;
+        }
+
+        .nav-section-title {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--muted);
+            margin: 10px 0 6px;
+            text-transform: uppercase;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .nav-btn {
+            padding: 6px 0;
+            font-size: 0.82rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: #fff;
+            text-align: center;
+            position: relative;
+        }
+
+        .nav-btn.done {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1e40af;
+        }
+
+        .nav-btn.ok {
+            background: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: #065f46;
+        }
+
+        .nav-btn.no {
+            background: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: #991b1b;
+        }
+
+        .nav-btn.flagged::after {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 8px;
+            height: 8px;
+            background: var(--flag-color);
+            border-radius: 50%;
+        }
+
+        /* Result Banner */
+        .result-banner {
+            background: #ecfdf5;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 18px;
+            display: none;
+        }
+
+        .result-banner h2 {
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        sub,
+        sup {
+            font-size: 72%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        sup {
+            top: -0.5em;
+        }
+
+        sub {
+            bottom: -0.25em;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Header: Tabs và Đảo câu hỏi -->
-    <div class="controls-header">
-        <div class="tabs">
-            <button class="tab-btn active" id="tab-single" onclick="switchMode('single')">🎯 Luyện Từng Câu</button>
-            <button class="tab-btn" id="tab-all" onclick="switchMode('all')">📜 Xem Toàn Bộ</button>
+    <header>
+        <div class="brand">🧬 Luyện Tập Sinh Học 12</div>
+        <div class="controls">
+            <div class="mode-group">
+                <button class="mode-btn active" id="btnModePractice" onclick="setMode('practice')">Chế độ Luyện
+                    tập</button>
+                <button class="mode-btn" id="btnModeExam" onclick="setMode('exam')">Chế độ Thi nghiêm túc</button>
+            </div>
+            <button onclick="shuffleQuestions()">🔀 Xáo câu hỏi</button>
+            <button onclick="shuffleOptions()">🔀 Xáo đáp án</button>
+            <button onclick="resetAll()">↺ Làm lại từ đầu</button>
+            <button class="btn-primary" id="btnSubmitAll" onclick="submitExam()">Nộp bài & Chấm điểm</button>
         </div>
-        <button class="btn-shuffle" onclick="shuffleQuestions()">🔀 Đảo Câu Hỏi</button>
+    </header>
+
+    <div class="container">
+        <main>
+            <div class="result-banner" id="resultBanner"></div>
+
+            <div class="part-tabs">
+                <button class="part-tab active" onclick="filterPart('all', this)">Tất cả (<span
+                        id="cntAll">0</span>)</button>
+                <button class="part-tab" onclick="filterPart('mcq', this)">Phần I: Trắc nghiệm (<span
+                        id="cntMcq">0</span>)</button>
+                <button class="part-tab" onclick="filterPart('tf', this)">Phần II: Đúng / Sai (<span
+                        id="cntTf">0</span>)</button>
+                <button class="part-tab" onclick="filterPart('sa', this)">Phần III: Trả lời ngắn (<span
+                        id="cntSa">0</span>)</button>
+            </div>
+
+            <div id="quizContainer"></div>
+        </main>
+
+        <aside class="sidebar">
+            <div class="timer-box" id="timerBox" style="display:none;">
+                <div style="font-size:0.8rem; color:#9ca3af; margin-bottom:2px;">THỜI GIAN LÀM BÀI</div>
+                <div class="timer-display" id="timerDisplay">45:00</div>
+                <div class="timer-controls">
+                    <button onclick="setTimerMinutes(15)">15p</button>
+                    <button onclick="setTimerMinutes(30)">30p</button>
+                    <button onclick="setTimerMinutes(45)">45p</button>
+                    <button onclick="togglePauseTimer()" id="btnPauseTimer">Tạm dừng</button>
+                </div>
+            </div>
+
+            <div style="font-weight:700; margin-bottom:8px; display:flex; justify-content:space-between;">
+                <span>Bảng quản lý câu hỏi</span>
+                <span id="progressText" style="color:var(--primary-dark);">0/0</span>
+            </div>
+
+            <div class="legend">
+                <span><i class="dot"></i> Chưa làm</span>
+                <span><i class="dot done"></i> Đã làm</span>
+                <span><i class="dot flag"></i> Đánh dấu</span>
+                <span><i class="dot ok"></i> Đúng</span>
+                <span><i class="dot no"></i> Sai</span>
+            </div>
+
+            <div class="nav-section-title">Phần I: Trắc nghiệm</div>
+            <div class="nav-grid" id="navMcq"></div>
+
+            <div class="nav-section-title">Phần II: Đúng / Sai</div>
+            <div class="nav-grid" id="navTf"></div>
+
+            <div class="nav-section-title">Phần III: Trả lời ngắn</div>
+            <div class="nav-grid" id="navSa"></div>
+        </aside>
     </div>
 
-    <!-- ==================== CHẾ ĐỘ TỪNG CÂU ==================== -->
-    <div id="mode-single">
-        <div class="q-number" id="single-counter">Câu 1 / 10</div>
-        <div class="q-text" id="single-text"></div>
+    <script>
+        // =========================================================================
+        // CẤU HÌNH ĐƯỜNG DẪN TƯƠNG ĐỐI CHO ẢNH SƠ ĐỒ (CÂU 7 - ĐÚNG SAI)
+        // Bạn có thể dán trực tiếp link tương đối vào đây (vd: "./images/sodo.png")
+        // hoặc dán trực tiếp trên giao diện web khi mở file.
+        // =========================================================================
+        let IMAGE_REL_PATH = "./Picture1.png";
 
-        <div class="input-group">
-            <input type="text" id="single-input" placeholder="Nhập đáp án của bạn...">
-            <button class="btn-primary" onclick="checkSingle()">Kiểm tra</button>
-            <button class="btn-warning" onclick="revealSingle()">👁️ Mở đáp án</button>
-        </div>
+        // Dữ liệu câu hỏi đã chuẩn hóa ký hiệu mũ (<sup>), chân (<sub>) và đáp án
+        const RAW_QUESTIONS = [
+            // ================= PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN =================
+            {
+                id: "mcq_1", type: "mcq", origNum: "Câu 1",
+                q: "Ở đậu Hà Lan, một gene gồm 2 allele (A, a) quy định, nếu A quy định kiểu hình hoa đỏ thì a quy định kiểu hình tương ứng là",
+                opts: ["hoa trắng", "thân cao", "hạt nhăn", "hạt xanh"], ans: 0
+            },
+            {
+                id: "mcq_2", type: "mcq", origNum: "Câu 2",
+                q: "Thế nào là tính trạng tương phản?",
+                opts: [
+                    "Các tính trạng cùng một loại nhưng biểu hiện trái ngược nhau.",
+                    "Những tính trạng số lượng và tính trạng chất lượng.",
+                    "Các tính trạng khác nhau.",
+                    "Tính trạng do một cặp allele quy định."
+                ], ans: 0
+            },
+            {
+                id: "mcq_3", type: "mcq", origNum: "Câu 3",
+                q: "Trội hoàn toàn là trường hợp nào sau đây?",
+                opts: [
+                    "F<sub>1</sub> đồng tính còn F<sub>2</sub> phân li 3 : 1.",
+                    "Gene quy định tính trạng trội hoàn toàn lấn át allele lặn cùng cặp để biểu hiện tính trạng trội.",
+                    "Thế hệ lai chỉ xuất hiện 1 tính trạng trội.",
+                    "Tính trạng trội được biểu hiện ở kiểu gene dị hợp."
+                ], ans: 1
+            },
+            {
+                id: "mcq_4", type: "mcq", origNum: "Câu 4",
+                q: "Những phép lai nào sau đây được gọi là lai phân tích?",
+                opts: [
+                    "P: Aa × Aa và P: AaBb × aabb.",
+                    "P: Aa × aa và P: AaBb × aabb.",
+                    "P: Aa × aa và P: Aabb × aaBb.",
+                    "P: Aa × aa và P: AaBb × AaBb."
+                ], ans: 1
+            },
+            {
+                id: "mcq_5", type: "mcq", origNum: "Câu 5",
+                q: "Phép lai thuận nghịch là phép lai:",
+                opts: [
+                    "Thay đổi vị trí bố mẹ.",
+                    "Thay đổi tính trạng đem lai.",
+                    "Thay đổi dòng thuần chủng.",
+                    "Thay đổi kiểu gene bố, giữ nguyên kiểu gene của mẹ."
+                ], ans: 0
+            },
+            {
+                id: "mcq_6", type: "mcq", origNum: "Câu 6",
+                q: "Đối tượng Mendel chọn làm cặp bố mẹ trong nghiên cứu của mình là:",
+                opts: ["Dòng thuần chủng", "Dòng nào cũng được", "Dòng có tính trạng lặn", "Dòng có tính trạng trội"], ans: 0
+            },
+            {
+                id: "mcq_7", type: "mcq", origNum: "Câu 7",
+                q: "Các bước trong phương pháp lai và phân tích cơ thể lai của Mendel gồm:\n1. Đưa giả thuyết giải thích kết quả và chứng minh giả thuyết.\n2. Lai các dòng thuần khác nhau về 1 hoặc vài tính trạng rồi phân tích kết quả ở F<sub>1</sub>, F<sub>2</sub>, F<sub>3</sub>.\n3. Tạo các dòng thuần chủng.\n4. Sử dụng toán xác suất để phân tích kết quả lai.\nTrình tự các bước Mendel đã tiến hành nghiên cứu để rút ra được quy luật di truyền là:",
+                opts: ["1, 2, 3, 4", "2, 3, 4, 1", "3, 2, 4, 1", "2, 1, 3, 4"], ans: 2
+            },
+            {
+                id: "mcq_8", type: "mcq", origNum: "Câu 8",
+                q: "Trong các thí nghiệm của Mendel, khi lai bố mẹ thuần chủng khác nhau về một cặp tính trạng tương phản, ông nhận thấy ở thế hệ F<sub>2</sub>",
+                opts: [
+                    "Có sự phân li theo tỉ lệ 3 trội : 1 lặn.",
+                    "Có sự phân li theo tỉ lệ 1 trội : 1 lặn.",
+                    "Đều có kiểu hình khác bố mẹ.",
+                    "Đều có kiểu hình giống bố mẹ."
+                ], ans: 0
+            },
+            {
+                id: "mcq_9", type: "mcq", origNum: "Câu 9",
+                q: "Hãy hoàn chỉnh nội dung định luật của Mendel khi xét về một cặp tính trạng: “Khi lai giữa các cá thể khác nhau về (A) và (B), thế hệ lai thứ nhất đồng loạt xuất hiện tính trạng (C)”. (A), (B), (C) lần lượt là:",
+                opts: [
+                    "1 cặp tính trạng tương phản; thuần chủng; trội.",
+                    "1 cặp tính trạng tương phản; thuần chủng; trung gian.",
+                    "hai cặp tính trạng; thuần chủng; trội.",
+                    "các cặp tính trạng; thuần chủng; trội."
+                ], ans: 0
+            },
+            {
+                id: "mcq_10", type: "mcq", origNum: "Câu 10",
+                q: "Quy luật phân li của Mendel không nghiệm đúng trong trường hợp nào sau đây?",
+                opts: [
+                    "Bố mẹ thuần chủng về cặp tính trạng đem lai.",
+                    "Số lượng cá thể thu được của phép lai phải đủ lớn.",
+                    "Tính trạng do một gene quy định trong đó gene trội át hoàn toàn gene lặn.",
+                    "Tính trạng do một gene quy định và chịu ảnh hưởng của môi trường."
+                ], ans: 3
+            },
+            {
+                id: "mcq_11", type: "mcq", origNum: "Câu 11",
+                q: "Theo thí nghiệm của Mendel thì khi lai phân tích các kiểu hình trội ở F<sub>2</sub>, nhận định nào đúng về F<sub>3</sub>:",
+                opts: [
+                    "100% cá thể F<sub>3</sub> có kiểu gene giống nhau.",
+                    "F<sub>3</sub> có kiểu gene giống P hoặc có kiểu gene giống F<sub>1</sub>.",
+                    "2/3 cá thể F<sub>3</sub> có kiểu gene giống P : 1/3 cá thể F<sub>3</sub> có kiểu gene giống F<sub>1</sub>.",
+                    "1/3 cá thể F<sub>3</sub> có kiểu gene giống P : 2/3 cá thể F<sub>3</sub> có kiểu gene giống F<sub>1</sub>."
+                ], ans: 3
+            },
+            {
+                id: "mcq_12", type: "mcq", origNum: "Câu 12",
+                q: "Trong thí nghiệm lai một cặp tính trạng của Mendel, nếu cho F<sub>2</sub> giao phấn ngẫu nhiên với nhau thì tỉ lệ kiểu hình ở F<sub>3</sub> được dự đoán là…",
+                opts: ["3 hoa tím : 1 hoa trắng.", "7 hoa tím : 1 hoa trắng.", "8 hoa tím : 1 hoa trắng.", "15 hoa tím : 1 hoa trắng."], ans: 0
+            },
+            {
+                id: "mcq_13", type: "mcq", origNum: "Câu 13",
+                q: "Quy luật phân li có ý nghĩa chủ yếu đối với thực tiễn là gì?",
+                opts: [
+                    "Xác định được tính trội, lặn để ứng dụng vào chọn giống.",
+                    "Cho thấy sự phân li của tính trạng ở các thế hệ lai.",
+                    "Xác định được phương thức di truyền của tính trạng.",
+                    "Xác định được các dòng thuần."
+                ], ans: 0
+            },
+            {
+                id: "mcq_14", type: "mcq", origNum: "Câu 14",
+                q: "Ở đậu Hà Lan, hạt vàng trội hoàn toàn so với hạt xanh. Cho giao phấn giữa cây hạt vàng thuần chủng với cây hạt xanh, kiểu hình ở cây F<sub>1</sub> sẽ như thế nào?",
+                opts: ["100% hạt vàng.", "1 hạt vàng : 3 hạt xanh.", "3 hạt vàng : 1 hạt xanh.", "1 hạt vàng : 1 hạt xanh."], ans: 0
+            },
+            {
+                id: "mcq_15", type: "mcq", origNum: "Câu 15",
+                q: "Ở người, allele B quy định da bình thường; allele b quy định bị bệnh bạch tạng, gene này nằm trên NST thường. Cho rằng bố mẹ đều dị hợp, xác suất để vợ chồng này sinh người con đầu tiên bình thường?",
+                opts: ["25%", "12,5%", "56,25%", "75%"], ans: 3
+            },
+            {
+                id: "mcq_16", type: "mcq", origNum: "Câu 16",
+                q: "Cho lúa hạt tròn lai với lúa hạt dài, F<sub>1</sub> 100% lúa hạt dài. Cho F<sub>1</sub> tự thụ phấn được F<sub>2</sub>. Trong số lúa hạt dài F<sub>2</sub>, tính theo lí thuyết thì số cây hạt dài khi tự thụ phấn cho F<sub>3</sub> toàn lúa hạt dài chiếm tỉ lệ",
+                opts: ["1/4.", "1/3.", "3/4.", "2/3."], ans: 1
+            },
+            {
+                id: "mcq_17", type: "mcq", origNum: "Câu 17",
+                q: "Tính trạng trội không hoàn toàn được xác định khi",
+                opts: [
+                    "Tính trạng đó gồm 3 tính trạng tương ứng.",
+                    "Lai giữa hai bố mẹ thuần chủng, F<sub>1</sub> đồng loạt có kiểu hình khác với bố mẹ.",
+                    "Phép lai giữa 2 cá thể được xác định là mang cặp gene dị hợp làm xuất hiện tỉ lệ phân tính 1 : 2 : 1.",
+                    "Lai phân tích cá thể dị hợp làm xuất hiện tỉ lệ 1 : 1."
+                ], ans: 2
+            },
+            {
+                id: "mcq_18", type: "mcq", origNum: "Câu 18",
+                q: "Trong trường hợp 1 gene quy định 1 tính trạng thường, trội không hoàn toàn. Tỉ lệ kiểu gene và kiểu hình của phép lai P: Aa × Aa lần lượt là",
+                opts: ["1:2:1 và 1:2:1", "3:1 và 1:2:1", "1:2:1 và 3:1", "3:1 và 3:1"], ans: 0
+            },
+            {
+                id: "mcq_19", type: "mcq", origNum: "Câu 19",
+                q: "Ở một loài hoa, kiểu gene DD quy định hoa đỏ, Dd quy định hoa hồng, dd quy định hoa trắng. Lai phân tích cây hoa màu đỏ, ở thế hệ sau sẽ xuất hiện kiểu hình nào sau đây?",
+                opts: ["Toàn hoa đỏ", "Toàn hoa hồng", "1 hoa đỏ : 1 hoa trắng", "1 hoa hồng : 1 hoa trắng"], ans: 1
+            },
+            {
+                id: "mcq_20", type: "mcq", origNum: "Câu 20",
+                q: "Kiểu gene của cá chép không vảy là Aa, cá chép có vảy là aa. Kiểu gene AA làm trứng không nở. Tính theo lí thuyết, phép lai giữa các cá chép không vảy sẽ cho tỉ lệ kiểu hình ở đời con là:",
+                opts: [
+                    "3 cá chép không vảy : 1 cá chép có vảy.",
+                    "2 cá chép không vảy : 1 cá chép có vảy.",
+                    "1 cá chép không vảy : 2 cá chép có vảy.",
+                    "100% cá chép không vảy."
+                ], ans: 1
+            },
+            {
+                id: "mcq_22", type: "mcq", origNum: "Câu 22",
+                q: "Theo lí thuyết, phép lai nào sau đây cho đời con có 2 loại kiểu gene?",
+                opts: ["AA × aa", "Aa × aa", "Aa × Aa", "AA × AA"], ans: 1
+            },
+            {
+                id: "mcq_23", type: "mcq", origNum: "Câu 23",
+                q: "Ở cà chua, allele A quy định quả đỏ trội hoàn toàn với allele a quy định quả vàng. Phép lai nào sau đây cho F<sub>1</sub> có tỉ lệ kiểu hình 3 cây quả đỏ : 1 cây quả vàng?",
+                opts: ["Aa × Aa", "AA × Aa", "AA × aa", "Aa × aa"], ans: 0
+            },
+            {
+                id: "mcq_24", type: "mcq", origNum: "Câu 24",
+                q: "Ở người, kiểu tóc do 1 gene gồm 2 allele (A, a) nằm trên NST thường. Một người đàn ông tóc xoăn lấy vợ cũng tóc xoăn, họ sinh lần thứ nhất được 1 trai tóc xoăn và lần thứ hai được 1 gái tóc thẳng. Cặp vợ chồng này có kiểu gene là",
+                opts: ["AA × Aa", "AA × AA", "Aa × Aa", "AA × aa"], ans: 2
+            },
+            {
+                id: "mcq_25", type: "mcq", origNum: "Câu 25",
+                q: "Cho biết allele D quy định hoa đỏ trội không hoàn toàn so với allele d quy định hoa trắng. Tính trạng trung gian sẽ có hoa màu hồng. Theo lí thuyết, phép lai giữa các cây có kiểu gene nào sau đây tạo ra đời con có 3 loại kiểu hình?",
+                opts: ["Dd × Dd", "DD × Dd", "Dd × dd", "DD × dd"], ans: 0
+            },
+            {
+                id: "mcq_26", type: "mcq", origNum: "Câu 26",
+                q: "Ở người, gene quy định nhóm máu ở 3 allele I<sup>A</sup>, I<sup>B</sup>, I<sup>O</sup>. Allele I<sup>A</sup>, I<sup>B</sup> trội so với I<sup>O</sup>. Nhóm máu AB do kiểu gene I<sup>A</sup>I<sup>B</sup> quy định, nhận xét nào sau đây đúng?",
+                opts: [
+                    "Allele I<sup>A</sup> và I<sup>B</sup> tương tác theo trội lặn không hoàn toàn",
+                    "Allele I<sup>A</sup> và I<sup>B</sup> tương tác theo kiểu đồng trội",
+                    "Allele I<sup>A</sup> và I<sup>B</sup> tương tác theo trội lặn hoàn toàn",
+                    "Allele I<sup>A</sup> và I<sup>B</sup> tương tác bổ sung"
+                ], ans: 1
+            },
+            {
+                id: "mcq_27", type: "mcq", origNum: "Câu 27",
+                q: "Ở người nhóm máu ABO do 3 allele I<sup>A</sup>, I<sup>B</sup>, I<sup>O</sup> quy định:\n- Nhóm máu A: I<sup>A</sup>I<sup>A</sup>, I<sup>A</sup>I<sup>O</sup>.\n- Nhóm máu B: I<sup>B</sup>I<sup>B</sup>, I<sup>B</sup>I<sup>O</sup>.\n- Nhóm máu O: I<sup>O</sup>I<sup>O</sup>.\n- Nhóm máu AB: I<sup>A</sup>I<sup>B</sup>.\nMẹ có nhóm máu AB, sinh con có nhóm máu AB. Nhóm máu nào dưới đây chắc chắn không phải là nhóm máu của người bố?",
+                opts: ["Nhóm máu AB.", "Nhóm máu O.", "Nhóm máu B.", "Nhóm máu A."], ans: 1
+            },
+            {
+                id: "mcq_30", type: "mcq", origNum: "Câu 30",
+                q: "Ở người, kiểu gene I<sup>A</sup>I<sup>A</sup>, I<sup>A</sup>I<sup>O</sup> quy định nhóm máu A; kiểu gene I<sup>B</sup>I<sup>B</sup>, I<sup>B</sup>I<sup>O</sup> quy định nhóm máu B; kiểu gene I<sup>A</sup>I<sup>B</sup> quy định nhóm máu AB; kiểu gene I<sup>O</sup>I<sup>O</sup> quy định nhóm máu O. Tại một nhà hộ sinh, người ta nhầm lẫn 2 đứa trẻ sơ sinh với nhau. Trường hợp nào sau đây không cần biết nhóm máu của người cha mà vẫn có thể xác định được đứa trẻ nào là con của người mẹ nào?",
+                opts: [
+                    "Hai người mẹ có nhóm máu AB và nhóm máu O, hai đứa trẻ có nhóm máu O và nhóm máu AB.",
+                    "Hai người mẹ có nhóm máu A và nhóm máu O, hai đứa trẻ có nhóm máu O và nhóm máu A.",
+                    "Hai người mẹ có nhóm máu A và nhóm máu B, hai đứa trẻ có nhóm máu B và nhóm máu A.",
+                    "Hai người mẹ có nhóm máu B và nhóm máu O, hai đứa trẻ có nhóm máu B và nhóm máu O."
+                ], ans: 0
+            },
+            {
+                id: "mcq_35", type: "mcq", origNum: "Câu 35",
+                q: "Có hai chị em ruột mang 2 nhóm máu khác nhau là AB và O. Các cô gái này biết rõ ông bà ngoại họ đều là nhóm máu A. Kiểu gene tương ứng của bố và mẹ của các cô gái này là",
+                opts: ["I<sup>O</sup>I<sup>O</sup> và I<sup>A</sup>I<sup>O</sup>", "I<sup>B</sup>I<sup>O</sup> và I<sup>A</sup>I<sup>O</sup>", "I<sup>A</sup>I<sup>B</sup> và I<sup>A</sup>I<sup>O</sup>", "I<sup>A</sup>I<sup>O</sup> và I<sup>A</sup>I<sup>O</sup>"], ans: 1
+            },
+            {
+                id: "mcq_37", type: "mcq", origNum: "Câu 37",
+                q: "Theo lí thuyết, phép lai nào sau đây cho đời con có kiểu gene phân li theo tỉ lệ 1 : 1?",
+                opts: ["Aa × aa.", "aa × aa.", "Aa × aA.", "AA × AA."], ans: 0
+            },
+            {
+                id: "mcq_38", type: "mcq", origNum: "Câu 38",
+                q: "Ở người, nhóm máu ABO do gene có 3 allele I<sup>A</sup>, I<sup>B</sup>, I<sup>O</sup> quy định. Bố có nhóm máu AB, sinh con có nhóm máu AB, nhóm máu nào dưới đây chắc chắn không phải là nhóm máu của người mẹ?",
+                opts: ["Nhóm máu B.", "Nhóm máu AB.", "Nhóm máu O.", "Nhóm máu A."], ans: 2
+            },
+            {
+                id: "mcq_39", type: "mcq", origNum: "Câu 39",
+                q: "Phép lai nào sau đây cho đời con có tỉ lệ kiểu gene 1 : 2 : 1?",
+                opts: ["Aa × Aa.", "Aa × aa.", "aa × Aa.", "Aa × AA."], ans: 0
+            },
+            {
+                id: "mcq_40", type: "mcq", origNum: "Câu 40",
+                q: "Cơ thể nào sau đây là cơ thể dị hợp về 1 cặp gene?",
+                opts: ["AaBbDdEe.", "AaBBddEe.", "AaBBddEE.", "AaBBDdEe."], ans: 2
+            },
+            {
+                id: "mcq_41", type: "mcq", origNum: "Câu 41",
+                q: "Cho biết mỗi gene quy định một tính trạng, allele trội là trội hoàn toàn. Phép lai AaBbDd × aabbDD cho đời con có tối đa bao nhiêu loại kiểu hình?",
+                opts: ["16.", "2.", "8.", "4."], ans: 3
+            },
+            {
+                id: "mcq_42", type: "mcq", origNum: "Câu 42",
+                q: "Ở đậu Hà Lan, allele A quy định hoa tím trội hoàn toàn so với allele a quy định hoa trắng. Cho cây hoa tím thuần chủng lai với cây hoa trắng (P), thu được F<sub>1</sub>. Cho cây F<sub>1</sub> tự thụ phấn, thu được F<sub>2</sub>. Tính theo lí thuyết, trong số các cây hoa tím ở F<sub>2</sub>, cây thuần chủng chiếm tỉ lệ bao nhiêu?",
+                opts: ["1/4", "2/3", "3/4", "1/3"], ans: 3
+            },
+            {
+                id: "mcq_45", type: "mcq", origNum: "Câu 45",
+                q: "Theo lí thuyết, phép lai nào sau đây tạo ra đời con có kiểu gene aa chiếm tỉ lệ 25%?",
+                opts: ["Aa × Aa", "aa × aa", "AA × Aa", "Aa × aa"], ans: 0
+            },
+            {
+                id: "mcq_46", type: "mcq", origNum: "Câu 46",
+                q: "Điểm độc đáo nhất trong phương pháp nghiên cứu di truyền đã giúp Mendel phát hiện ra các quy luật di truyền là:",
+                opts: [
+                    "Tạo dòng thuần chủng trước khi lai.",
+                    "Lai các dòng thuần chủng khác nhau về một hoặc vài tính trạng rồi phân tích kết quả ở thế hệ F<sub>1</sub>, F<sub>2</sub>, F<sub>3</sub>.",
+                    "Sử dụng toán học để phân tích kết quả lai F<sub>1</sub>, F<sub>2</sub>, F<sub>3</sub>.",
+                    "Đưa ra giả thuyết và chứng minh tính đúng đắn của giả thuyết đó."
+                ], ans: 1
+            },
+            {
+                id: "mcq_47", type: "mcq", origNum: "Câu 47",
+                q: "Cho các nhận định sau:\n(1) Mỗi tính trạng được kiểm soát bởi một nhân tố di truyền.\n(2) Trong tế bào, các nhân tố di truyền hòa trộn vào nhau.\n(3) Bố (mẹ) chỉ truyền cho con (qua giao tử) 1 trong 2 thành viên của cặp nhân tố di truyền.\n(4) Sự thụ tinh kết hợp giao tử bố và giao tử mẹ tạo nên cặp nhân tố di truyền ở đời lai.\nCó bao nhiêu nhận định không đúng theo quan điểm di truyền của Mendel?",
+                opts: ["2.", "4.", "3.", "1."], ans: 0
+            },
+            {
+                id: "mcq_48", type: "mcq", origNum: "Câu 48",
+                q: "Để kiểm tra giả thuyết của mình, Mendel đã làm thí nghiệm được gọi là phép lai kiểm nghiệm hay còn được gọi là phép lai?",
+                opts: ["Lai xa.", "Lai phân tích.", "Lai kinh tế.", "Lai khác dòng."], ans: 1
+            },
+            {
+                id: "mcq_50", type: "mcq", origNum: "Câu 50",
+                q: "Ở cà chua, allele A quy định quả đỏ trội hoàn toàn so với allele a quy định quả vàng. Cho biết quá trình giảm phân không xảy ra đột biến. Theo lí thuyết, những phép lai nào sau đây cho đời con có cả cây quả đỏ và cây quả vàng?",
+                opts: ["Aa × Aa và Aa × aa", "Aa × Aa và AA × Aa", "AA × aa và AA × Aa", "Aa × aa và AA × Aa"], ans: 0
+            },
+            {
+                id: "mcq_52", type: "mcq", origNum: "Câu 52",
+                q: "Đối tượng nghiên cứu di truyền học của Mendel là gì?",
+                opts: ["Đậu Hà Lan.", "Ruồi giấm.", "Hoa phấn.", "Lúa mì."], ans: 0
+            },
+            {
+                id: "mcq_53", type: "mcq", origNum: "Câu 53",
+                q: "Định luật phân li độc lập góp phần giải thích hiện tượng:",
+                opts: [
+                    "Liên kết giữa các gene cùng nằm trên 1 cặp nhiễm sắc thể (NST) tương đồng.",
+                    "Biến dị tổ hợp vô cùng phong phú ở loài giao phối.",
+                    "Thay đổi vị trí giữa các gene cùng nằm trên 2 NST khác nhau của cặp NST tương đồng.",
+                    "Phân li ngẫu nhiên của các cặp gene trong giảm phân và tổ hợp tự do trong thụ tinh."
+                ], ans: 1
+            },
+            {
+                id: "mcq_54", type: "mcq", origNum: "Câu 54",
+                q: "Điều kiện cơ bản đảm bảo cho sự di truyền độc lập của các cặp tính trạng là:",
+                opts: [
+                    "Gene trội lấn át hoàn toàn gene lặn.",
+                    "Các gene nằm trên các cặp nhiễm sắc thể tương đồng khác nhau.",
+                    "Các gene quy định các cặp tính trạng không hòa vào nhau.",
+                    "Số lượng cá thể nghiên cứu lớn."
+                ], ans: 1
+            },
+            {
+                id: "mcq_55", type: "mcq", origNum: "Câu 55",
+                q: "Trong trường hợp mỗi gene quy định một tính trạng và tính trội hoàn toàn so với tính lặn, nếu P thuần chủng khác nhau bởi n cặp tính trạng tương phản. Tỉ lệ phân li kiểu gene ở F<sub>2</sub> là:",
+                opts: ["(1 : 2 : 1)<sup>n</sup>", "(3 : 1)<sup>n</sup>", "2<sup>n</sup>", "3<sup>n</sup>"], ans: 0
+            },
+            {
+                id: "mcq_56", type: "mcq", origNum: "Câu 56",
+                q: "Cơ thể có kiểu gene nào sau đây được gọi là thể đồng hợp 2 cặp gene?",
+                opts: ["AAbb", "AaBb", "AABb", "AaBB"], ans: 0
+            },
+            {
+                id: "mcq_57", type: "mcq", origNum: "Câu 57",
+                q: "Ở đậu Hà Lan, xét 2 cặp gene A, a và B, b nằm trên 2 cặp NST tương đồng khác nhau. Theo lí thuyết, sự di truyền của 2 cặp gene này tuân theo quy luật nào sau đây?",
+                opts: ["Phân li độc lập.", "Hoán vị gene.", "Liên kết gene.", "Di truyền liên kết giới tính."], ans: 0
+            },
+            {
+                id: "mcq_58", type: "mcq", origNum: "Câu 58",
+                q: "Trong quy luật di truyền phân li độc lập với các gene trội là trội hoàn toàn. Nếu P thuần chủng khác nhau bởi n cặp tính trạng tương phản thì F<sub>1</sub> sẽ dị hợp về bao nhiêu cặp gene?",
+                opts: ["2n", "3<sup>n</sup>", "n", "2<sup>n</sup>"], ans: 2
+            },
+            {
+                id: "mcq_59", type: "mcq", origNum: "Câu 59",
+                q: "Ở đậu Hà Lan, gene A quy định thân cao, a quy định thân thấp, B quy định hạt màu vàng, b quy định hạt màu xanh. Phép lai cho đồng loạt thân cao, hạt màu vàng là:",
+                opts: ["AaBB × aabb", "AABb × aabb", "AAbb × aaBB", "AABb × Aabb"], ans: 2
+            },
+            {
+                id: "mcq_60", type: "mcq", origNum: "Câu 60",
+                q: "Xét 2 cặp allele A, a và B, b nằm trên 2 cặp nhiễm sắc thể thường đồng dạng khác nhau. Hãy cho biết: Có thể có bao nhiêu kiểu gene khác nhau trong quần thể?",
+                opts: ["9", "6", "4", "1"], ans: 0
+            },
+            {
+                id: "mcq_61", type: "mcq", origNum: "Câu 61",
+                q: "Cơ thể có kiểu gene AaBbddEe qua giảm phân bình thường sẽ cho số loại giao tử tối đa là:",
+                opts: ["6", "8", "12", "16"], ans: 1
+            },
+            {
+                id: "mcq_62", type: "mcq", origNum: "Câu 62",
+                q: "Theo lí thuyết, cơ thể có kiểu gene aaBB giảm phân tạo ra loại giao tử aB chiếm tỉ lệ",
+                opts: ["50%", "15%", "25%", "100%"], ans: 3
+            },
+            {
+                id: "mcq_63", type: "mcq", origNum: "Câu 63",
+                q: "Phép lai giữa 2 cá thể khác nhau về 3 tính trạng trội, lặn hoàn toàn AaBbDd × AaBbDd sẽ có:",
+                opts: ["4 kiểu hình : 9 kiểu gene", "4 kiểu hình : 12 kiểu gene", "8 kiểu hình : 12 kiểu gene", "8 kiểu hình : 27 kiểu gene"], ans: 3
+            },
+            {
+                id: "mcq_64", type: "mcq", origNum: "Câu 64",
+                q: "Trong trường hợp một gene quy định một tính trạng, gene trội là trội hoàn toàn, các gene phân li độc lập, tổ hợp tự do. Phép lai AaBb × aabb cho đời con có sự phân li kiểu hình theo tỉ lệ",
+                opts: ["1 : 1 : 1 : 1", "3 : 1", "9 : 3 : 3 : 1", "1 : 1"], ans: 0
+            },
+            {
+                id: "mcq_65", type: "mcq", origNum: "Câu 65",
+                q: "Cho phép lai AaBb × Aabb. Biết mỗi gene quy định một tính trạng và tính trạng trội là trội hoàn toàn, theo lí thuyết, kiểu hình (A-B-) ở đời con chiếm tỉ lệ",
+                opts: ["1/4", "9/16", "3/8", "1/8"], ans: 2
+            },
+            {
+                id: "mcq_67", type: "mcq", origNum: "Câu 67",
+                q: "Ở một loài bọ cánh cứng: A mắt dẹt trội hoàn toàn so với a: mắt lồi; B mắt xám trội hoàn toàn so với b: mắt trắng. Biết gene nằm trên NST thường và thể mắt dẹt đồng hợp bị chết ngay sau khi được sinh ra. Trong phép lai AaBb × AaBb, người ta thu được 780 cá thể con sống sót (đề gốc ghi 789). Số cá thể con có mắt lồi màu trắng xấp xỉ bao nhiêu?",
+                opts: ["65", "260", "195", "130"], ans: 0
+            },
+            {
+                id: "mcq_71", type: "mcq", origNum: "Câu 71",
+                q: "Ở đậu Hà Lan gene A quy định hạt vàng, a quy định hạt lục, B: hạt trơn, b: hạt nhăn. Hai cặp gene này di truyền phân li độc lập với nhau. Lai phân tích 1 cây đậu Hà Lan mang kiểu hình trội, thế hệ sau được tỉ lệ 50% vàng trơn : 50% lục trơn. Cây đậu Hà Lan đó phải có kiểu gene:",
+                opts: ["AABb", "Aabb", "AaBb", "AaBB"], ans: 3
+            },
+            {
+                id: "mcq_77", type: "mcq", origNum: "Câu 77",
+                q: "Theo lí thuyết, cơ thể có kiểu gene AaBb khi giảm phân bình thường tạo được số loại giao tử tối đa là",
+                opts: ["4", "2", "3", "1"], ans: 0
+            },
+            {
+                id: "mcq_78", type: "mcq", origNum: "Câu 78",
+                q: "Ở đậu Hà Lan, allele quy định kiểu hình hoa đỏ và allele quy định kiểu hình nào sau đây được gọi là 1 cặp allele?",
+                opts: ["Hạt trơn.", "Quả vàng.", "Thân cao.", "Hoa trắng."], ans: 3
+            },
+            {
+                id: "mcq_81", type: "mcq", origNum: "Câu 81",
+                q: "Cho biết mỗi gene quy định một tính trạng, các gene phân li độc lập. Theo lí thuyết, phép lai nào sau đây cho tỉ lệ phân li kiểu gene ở đời con là: 1 : 2 : 1 : 1 : 2 : 1?",
+                opts: ["AaBb × AaBb.", "Aabb × aaBb.", "aaBb × AaBb.", "Aabb × AAbb."], ans: 2
+            },
+            {
+                id: "mcq_83", type: "mcq", origNum: "Câu 83",
+                q: "Một loài thực vật gene A quy định cây cao, gene a: cây thấp; gene B: quả đỏ, gene b: quả trắng. Các gene di truyền độc lập. Đời lai có kiểu hình cây thấp quả trắng chiếm 1/16. Kiểu gene của các cây bố mẹ là:",
+                opts: ["AaBb × Aabb.", "AaBB × aaBb.", "Aabb × AaBB.", "AaBb × AaBb."], ans: 3
+            },
+            {
+                id: "mcq_85", type: "mcq", origNum: "Câu 85",
+                q: "Ở đậu Hà Lan, xét 2 cặp allele trên 2 cặp nhiễm sắc thể tương đồng; gene A: vàng, allele a: xanh; gene B: hạt trơn, allele b: hạt nhăn. Dự đoán kết quả về kiểu hình của phép lai P: AaBB × AaBb.",
+                opts: [
+                    "3 vàng, trơn : 1 vàng, nhăn.",
+                    "3 vàng, trơn : 1 xanh, trơn.",
+                    "1 vàng, trơn : 1 xanh, trơn.",
+                    "3 vàng, nhăn : 1 xanh, trơn."
+                ], ans: 1
+            },
+            {
+                id: "mcq_91", type: "mcq", origNum: "Câu 91",
+                q: "Một gene chi phối nhiều tính trạng được gọi là:",
+                opts: ["Gene tăng cường.", "Gene điều hòa.", "Gene đa hiệu.", "Gene trội."], ans: 2
+            },
+            {
+                id: "mcq_96", type: "mcq", origNum: "Câu 96",
+                q: "Thế nào là gene đa allele?",
+                opts: [
+                    "Một gene có thể bị đột biến theo nhiều cách khác nhau, tạo nên nhiều allele.",
+                    "Một gene chi phối nhiều kiểu hình.",
+                    "Một gene chi phối tạo nên nhiều tRNA khác nhau.",
+                    "Một gene chi phối tạo nên nhiều sản phẩm có năng suất và chất lượng."
+                ], ans: 0
+            },
+            {
+                id: "mcq_98", type: "mcq", origNum: "Câu 98",
+                q: "Ở một loài thực vật, tính trạng chiều cao cây do 5 cặp gene không allele là A, a; B, b; D, d; H, h và M, m cùng quy định theo kiểu mỗi gene đóng góp một phần vào sự hình thành tính trạng chung. Trong kiểu gene nếu cứ có một allele trội thì chiều cao cây tăng thêm 5 cm. Khi trưởng thành, cây thấp nhất có chiều cao 100 cm. Theo lí thuyết, phép lai P: AABbDdHhmm × AabbDdHhMM cho đời con có số cây cao 125 cm chiếm tỉ lệ",
+                opts: ["5/16", "5/32", "3/32", "15/64"], ans: 0
+            },
+            {
+                id: "mcq_101", type: "mcq", origNum: "Câu 101",
+                q: "Trong trường hợp với n cặp gene dị hợp phân li độc lập, các allele trội không hoàn toàn so với allele lặn thì số lượng các loại kiểu hình ở đời con được xác định theo công thức nào?",
+                opts: ["2<sup>n</sup>", "3<sup>n</sup>", "4<sup>n</sup>", "5<sup>n</sup>"], ans: 1
+            },
+            {
+                id: "mcq_104", type: "mcq", origNum: "Câu 104",
+                q: "Kiểu gene nào sau đây là không thuần chủng?",
+                opts: ["aaBB.", "aabb.", "AaBb.", "AAbb."], ans: 2
+            },
+            {
+                id: "mcq_105", type: "mcq", origNum: "Câu 105",
+                q: "Cơ thể có kiểu gene nào sau đây là cơ thể đồng hợp tử về tất cả các cặp gene đang xét?",
+                opts: ["aabbdd.", "AabbDD.", "aaBbDD.", "aaBBDd."], ans: 0
+            },
+            {
+                id: "mcq_106", type: "mcq", origNum: "Câu 106",
+                q: "Theo lí thuyết, quá trình giảm phân bình thường ở cơ thể có kiểu gene AaBBDd tạo ra tối đa bao nhiêu loại giao tử?",
+                opts: ["8.", "2.", "4.", "6."], ans: 2
+            },
+            {
+                id: "mcq_108", type: "mcq", origNum: "Câu 108",
+                q: "Phép lai về 3 cặp tính trạng trội, lặn hoàn toàn giữa 2 cá thể AaBbDd × AabbDd sẽ cho thế hệ sau",
+                opts: ["8 kiểu hình : 18 kiểu gene.", "8 kiểu hình : 27 kiểu gene.", "4 kiểu hình : 9 kiểu gene.", "8 kiểu hình : 12 kiểu gene."], ans: 0
+            },
+            {
+                id: "mcq_109", type: "mcq", origNum: "Câu 109",
+                q: "Xét 3 cặp gene (Bb, Dd, Ee) quy định 3 tính trạng, trong đó 2 tính trạng đầu trội hoàn toàn, tính trạng thứ ba trội không hoàn toàn. Mỗi gene nằm trên 1 NST. Phép lai nào cho phép xuất hiện 12 kiểu hình, 27 kiểu gene ở thế hệ sau?",
+                opts: ["BbDdee × bbDdee.", "BBDdEe × BbDdee.", "BbDdEe × BbDdEe.", "BBDdee × BbDdEe."], ans: 2
+            },
+            {
+                id: "mcq_110", type: "mcq", origNum: "Câu 110",
+                q: "Xét phép lai AaBbDd × aaBbdd, theo lí thuyết thì đời con có bao nhiêu % số cá thể thuần chủng?",
+                opts: ["6,25%.", "12,5%.", "18,75%.", "0%."], ans: 1
+            },
+            {
+                id: "mcq_g1", type: "mcq", origNum: "Câu 1 (GT)",
+                q: "Nhà khoa học nào sau đây phát hiện ra hiện tượng di truyền liên kết với giới tính ở ruồi giấm?",
+                opts: ["J. Monod.", "C. Correns.", "T.H. Morgan.", "G.J. Mendel."], ans: 2
+            },
+            {
+                id: "mcq_g3", type: "mcq", origNum: "Câu 3 (GT)",
+                q: "Bệnh mù màu, máu khó đông ở người di truyền",
+                opts: [
+                    "giống các gene nằm trên NST thường.",
+                    "thẳng (bố cho con trai).",
+                    "chéo (mẹ cho con trai, bố cho con gái).",
+                    "theo dòng mẹ."
+                ], ans: 2
+            },
+            {
+                id: "mcq_g4", type: "mcq", origNum: "Câu 4 (GT)",
+                q: "Ở ruồi giấm, allele A quy định mắt đỏ trội hoàn toàn so với allele a quy định mắt trắng; gene nằm trên vùng không tương đồng của nhiễm sắc thể X. Kiểu gene của ruồi mắt trắng có kí hiệu là",
+                opts: ["X<sup>A</sup>X<sup>a</sup>, X<sup>A</sup>Y.", "X<sup>A</sup>Y, X<sup>a</sup>Y.", "X<sup>A</sup>X<sup>a</sup>, X<sup>a</sup>X<sup>a</sup>.", "X<sup>a</sup>Y, X<sup>a</sup>X<sup>a</sup>."], ans: 3
+            },
+            {
+                id: "mcq_g5", type: "mcq", origNum: "Câu 5 (GT)",
+                q: "Ở người, bệnh máu khó đông (hoặc mù màu) do đột biến gene lặn nằm trên NST giới tính X không có allele tương ứng trên Y. Bố và mẹ bình thường nhưng họ sinh ra một người con bị bệnh. Có thể nói gì về giới tính của người con nói trên?",
+                opts: [
+                    "Chắc chắn là con gái.",
+                    "Chắc chắn là con trai.",
+                    "Khả năng là con trai 50%, con gái 50%.",
+                    "Khả năng là con trai 25%, con gái 75%."
+                ], ans: 1
+            },
+            {
+                id: "mcq_g6", type: "mcq", origNum: "Câu 6 (GT)",
+                q: "Ở ruồi giấm, xét 1 gene nằm ở vùng không tương đồng trên NST giới tính X có 2 allele là A và a. Theo lí thuyết, cách viết kiểu gene nào sau đây sai?",
+                opts: ["X<sup>A</sup>X<sup>a</sup>.", "X<sup>A</sup>Y.", "X<sup>a</sup>X<sup>a</sup>.", "X<sup>A</sup>Y<sup>A</sup>."], ans: 3
+            },
+            {
+                id: "mcq_g7", type: "mcq", origNum: "Câu 7 (GT)",
+                q: "Ở ruồi giấm, gene quy định màu mắt nằm trên NST giới tính X không có allele tương ứng trên Y gồm có 2 allele: allele A quy định mắt đỏ trội hoàn toàn so với allele a quy định mắt trắng. Kiểu gene của ruồi đực mắt đỏ có kí hiệu là",
+                opts: ["X<sup>A</sup>X<sup>A</sup>", "X<sup>a</sup>X<sup>a</sup>", "X<sup>A</sup>X<sup>a</sup>", "X<sup>A</sup>Y"], ans: 3
+            },
+            {
+                id: "mcq_g8", type: "mcq", origNum: "Câu 8 (GT)",
+                q: "Khi nói về NST giới tính ở động vật, có bao nhiêu phát biểu sau đây đúng?\nI. Trong tế bào sinh dục chỉ chứa NST giới tính.\nII. NST giới tính chỉ chứa các gene quy định tính trạng giới tính.\nIII. Hợp tử mang cặp NST giới tính XY luôn phát triển thành cơ thể đực.\nIV. NST giới tính có thể bị đột biến về số lượng và cấu trúc.",
+                opts: ["1.", "4.", "2.", "3."], ans: 0
+            },
+            {
+                id: "mcq_g9", type: "mcq", origNum: "Câu 9 (GT)",
+                q: "Hiện tượng di truyền thẳng bị chi phối bởi trường hợp:",
+                opts: [
+                    "Gene nằm trên nhiễm sắc thể thường.",
+                    "Gene nằm trên nhiễm sắc thể giới tính.",
+                    "Gene nằm trên nhiễm sắc thể giới tính X không có allele trên Y.",
+                    "Gene nằm trên nhiễm sắc thể giới tính Y không có allele trên X."
+                ], ans: 3
+            },
+            {
+                id: "mcq_g10", type: "mcq", origNum: "Câu 10 (GT)",
+                q: "Động vật nào sau đây có NST giới tính ở giới cái là XX và ở giới đực là XO?",
+                opts: ["Thỏ.", "Châu chấu.", "Gà.", "Ruồi giấm."], ans: 1
+            },
+            {
+                id: "mcq_g11", type: "mcq", origNum: "Câu 11 (GT)",
+                q: "Hiện tượng di truyền chéo bị chi phối bởi trường hợp:",
+                opts: [
+                    "Gene nằm trên nhiễm sắc thể thường.",
+                    "Gene nằm trên nhiễm sắc thể giới tính.",
+                    "Gene nằm trên nhiễm sắc thể giới tính X không có allele trên Y.",
+                    "Gene nằm trên nhiễm sắc thể giới tính Y không có allele trên X."
+                ], ans: 2
+            },
+            {
+                id: "mcq_g12", type: "mcq", origNum: "Câu 12 (GT)",
+                q: "Ở loài nào sau đây, giới đực có cặp nhiễm sắc thể XY?",
+                opts: ["Trâu.", "Gà.", "Bồ câu.", "Vịt."], ans: 0
+            },
+            {
+                id: "mcq_g13", type: "mcq", origNum: "Câu 13 (GT)",
+                q: "Ở người, tỉ lệ giới tính xấp xỉ 1 : 1 vì",
+                opts: [
+                    "hợp tử được tạo thành do 1 trứng kết hợp 1 tinh trùng.",
+                    "sức sống của các giao tử đực khác với giao tử cái.",
+                    "cơ thể XY tạo giao tử X và Y với tỉ lệ ngang nhau.",
+                    "số tinh trùng được tạo ra bằng với số trứng."
+                ], ans: 2
+            },
+            {
+                id: "mcq_g15", type: "mcq", origNum: "Câu 15 (GT)",
+                q: "Xét 1 gene có 2 allele A và a nằm trên nhiễm sắc thể X không có allele trên nhiễm sắc thể Y. Kiểu gene nào sau đây là của cơ thể thuần chủng?",
+                opts: ["X<sup>A</sup>Y", "X<sup>A</sup>X<sup>a</sup>", "X<sup>a</sup>Y", "X<sup>a</sup>X<sup>a</sup>"], ans: 3
+            },
+            {
+                id: "mcq_g17", type: "mcq", origNum: "Câu 17 (GT)",
+                q: "Một gia đình có ông, các con trai, các cháu trai đều bị tật dính ngón tay 2 và 3. Đó là hiện tượng di truyền:",
+                opts: [
+                    "Liên kết giới tính, gene quy định tật dính ngón tay nằm trên nhiễm sắc thể X.",
+                    "Liên kết giới tính, gene quy định tật dính ngón tay nằm trên nhiễm sắc thể Y.",
+                    "Ngoài nhiễm sắc thể, qua tế bào chất.",
+                    "Liên kết giới tính, cặp gene tương đồng cả trên nhiễm sắc thể X và Y."
+                ], ans: 1
+            },
+            {
+                id: "mcq_g19", type: "mcq", origNum: "Câu 19 (GT)",
+                q: "Ở ruồi giấm, thực hiện phép lai P: X<sup>M</sup>X<sup>m</sup> × X<sup>m</sup>Y, tạo ra F<sub>1</sub>, theo lí thuyết F<sub>1</sub> có tối đa bao nhiêu loại kiểu gene?",
+                opts: ["4.", "3.", "1.", "2."], ans: 0
+            },
+            {
+                id: "mcq_g22", type: "mcq", origNum: "Câu 22 (GT)",
+                q: "Ở ruồi giấm, allele A quy định mắt đỏ là trội hoàn toàn so với allele a quy định mắt trắng. Tính theo lí thuyết, phép lai nào sau đây cho đời con có tỉ lệ kiểu hình là 3 ruồi mắt đỏ : 1 ruồi mắt trắng?",
+                opts: ["X<sup>A</sup>X<sup>A</sup> × X<sup>a</sup>Y", "X<sup>a</sup>X<sup>a</sup> × X<sup>A</sup>Y", "X<sup>A</sup>X<sup>a</sup> × X<sup>A</sup>Y", "X<sup>A</sup>X<sup>a</sup> × X<sup>a</sup>Y"], ans: 2
+            },
+            {
+                id: "mcq_g23", type: "mcq", origNum: "Câu 23 (GT)",
+                q: "Bệnh mù màu do gene lặn nằm trên NST giới tính X quy định (X<sup>m</sup>); X<sup>M</sup> (bình thường). Bố mẹ bình thường sinh con trai bị mù màu, kiểu gene của bố và mẹ là:",
+                opts: [
+                    "Bố: X<sup>M</sup>Y, mẹ: X<sup>M</sup>X<sup>m</sup>",
+                    "Bố: X<sup>M</sup>Y, mẹ: X<sup>M</sup>X<sup>M</sup>",
+                    "Bố: X<sup>m</sup>Y, mẹ: X<sup>M</sup>X<sup>M</sup>",
+                    "Bố: X<sup>m</sup>Y, mẹ: X<sup>M</sup>X<sup>m</sup>"
+                ], ans: 0
+            },
+            {
+                id: "mcq_g25", type: "mcq", origNum: "Câu 25 (GT)",
+                q: "Ở ruồi giấm, thực hiện phép lai P: X<sup>D</sup>X<sup>d</sup> × X<sup>D</sup>Y, tạo ra F<sub>1</sub>. Theo lí thuyết, F<sub>1</sub> có tối đa bao nhiêu loại kiểu gene?",
+                opts: ["1.", "3.", "2.", "4."], ans: 3
+            },
+            {
+                id: "mcq_g26", type: "mcq", origNum: "Câu 26 (GT)",
+                q: "Ở người, bệnh máu khó đông do gene lặn h nằm trên NST X quy định, gene trội H quy định tình trạng máu đông bình thường. Một gia đình có bố và con trai đều mắc bệnh máu khó đông, mẹ bình thường, nhận định nào dưới đây là đúng?",
+                opts: [
+                    "Con trai đã nhận gene bệnh từ bố.",
+                    "Mẹ bình thường có kiểu gene X<sup>H</sup>X<sup>H</sup>.",
+                    "Mẹ mang gene bệnh ở trạng thái dị hợp X<sup>H</sup>X<sup>h</sup>.",
+                    "Con gái của cặp vợ chồng này chắc chắn cũng bị bệnh máu khó đông."
+                ], ans: 2
+            },
+            {
+                id: "mcq_g27", type: "mcq", origNum: "Câu 27 (GT)",
+                q: "Ở ruồi giấm, allele A quy định mắt đỏ trội hoàn toàn so với allele a quy định mắt trắng. Theo lí thuyết, phép lai nào sau đây cho đời con có kiểu hình phân li theo tỉ lệ 1 ruồi cái mắt đỏ : 1 ruồi đực mắt trắng?",
+                opts: ["X<sup>A</sup>X<sup>a</sup> × X<sup>A</sup>Y.", "X<sup>A</sup>X<sup>a</sup> × X<sup>a</sup>Y.", "X<sup>a</sup>X<sup>a</sup> × X<sup>A</sup>Y.", "X<sup>A</sup>X<sup>A</sup> × X<sup>a</sup>Y."], ans: 2
+            },
+            {
+                id: "mcq_g31", type: "mcq", origNum: "Câu 31 (GT)",
+                q: "Ở ruồi giấm, màu mắt do một cặp allele A chi phối mắt đỏ; a chi phối mắt trắng. Cặp allele này nằm trên NST X không có allele tương ứng trên Y. Nếu không có đột biến, về mặt lí thuyết cặp bố mẹ nào sau đây không sinh ra được ruồi con mắt trắng?",
+                opts: ["X<sup>A</sup>X<sup>a</sup> × X<sup>A</sup>Y", "X<sup>a</sup>X<sup>a</sup> × X<sup>A</sup>Y", "X<sup>A</sup>X<sup>a</sup> × X<sup>a</sup>Y", "X<sup>A</sup>X<sup>A</sup> × X<sup>A</sup>Y"], ans: 3
+            },
+            {
+                id: "mcq_g33", type: "mcq", origNum: "Câu 33 (GT)",
+                q: "Đột biến mắt trắng ở ruồi giấm là do 1 gene lặn nằm trên NST X, không có allele tương ứng trên NST Y. Trong 1 quần thể ruồi giấm có thể tồn tại tối đa bao nhiêu kiểu gene về tính trạng trên?",
+                opts: ["5", "3", "2", "4"], ans: 0
+            },
+            {
+                id: "mcq_g34", type: "mcq", origNum: "Câu 34 (GT)",
+                q: "Ở ruồi giấm, xét một gene có 2 allele M và m, trong đó, allele M trội hoàn toàn so với allele m. Khi thực hiện phép lai P: X<sup>M</sup>X<sup>m</sup> × X<sup>m</sup>Y tạo ra F<sub>1</sub>. Theo lí thuyết, F<sub>1</sub> có tối đa bao nhiêu loại kiểu hình?",
+                opts: ["2.", "3.", "4.", "1."], ans: 2
+            },
+            {
+                id: "mcq_g35", type: "mcq", origNum: "Câu 35 (GT)",
+                q: "Ở ruồi giấm, thực hiện phép lai P: X<sup>D</sup>X<sup>D</sup> × X<sup>D</sup>Y tạo ra F<sub>1</sub>. Theo lí thuyết, F<sub>1</sub> có tối đa bao nhiêu loại kiểu gene?",
+                opts: ["1", "2", "4", "3"], ans: 1
+            },
 
-        <div class="feedback" id="single-feedback"></div>
+            // ================= PHẦN II: TRẮC NGHIỆM ĐÚNG / SAI =================
+            {
+                id: "tf_4", type: "tf", origNum: "Câu 4 (Đ/S)",
+                q: "Ở một loài thực vật, màu sắc hoa có hai trạng thái là hoa đỏ và hoa trắng. Trong phép lai giữa hai cây hoa trắng thuần chủng (P), thu được F<sub>1</sub> toàn cây hoa đỏ. Cho cây F<sub>1</sub> tự thụ phấn, thu được F<sub>2</sub> có kiểu hình phân li theo tỉ lệ 9 cây hoa đỏ : 7 cây hoa trắng. Theo lí thuyết, mỗi nhận định dưới đây đúng hay sai?",
+                items: [
+                    { text: "Các cây hoa đỏ có 4 loại kiểu gene.", ans: true },
+                    { text: "Các cây hoa đỏ thuần chủng có 1 loại kiểu gene.", ans: true },
+                    { text: "Các cây hoa trắng có 7 loại kiểu gene.", ans: false }, // 5 loại kiểu gene (AAbb, Aabb, aaBB, aaBb, aabb)
+                    { text: "Các cây hoa trắng thuần chủng có 2 loại kiểu gene.", ans: false } // 3 loại kiểu gene (AAbb, aaBB, aabb)
+                ]
+            },
+            {
+                id: "tf_5", type: "tf", origNum: "Câu 5 (Đ/S)",
+                q: "Ở một loài thực vật, tính trạng màu hoa do ba cặp gene phân li độc lập cùng quy định. Khi trong kiểu gene có đồng thời cả 3 loại allele trội A, B, D thì hoa có màu đỏ, kiểu gene có hai loại allele trội A và B nhưng không có allele trội D quy định hoa vàng, các kiểu gene còn lại đều quy định hoa trắng. Theo lí thuyết, mỗi dự đoán dưới đây đúng hay sai?",
+                items: [
+                    { text: "Có tối đa 15 loại kiểu gene quy định kiểu hình hoa trắng.", ans: true }, // 27 - 8(đỏ) - 4(vàng) = 15
+                    { text: "Cây hoa đỏ dị hợp tử về cả ba cặp gene tự thụ phấn, tạo ra đời con có số cây hoa trắng chiếm tỉ lệ 9/16.", ans: false }, // 1 - 27/64 - 9/64 = 28/64 = 7/16
+                    { text: "Cho một cây hoa đỏ giao phấn với một cây hoa trắng có thể thu được đời con có tỉ lệ kiểu hình là: 6 cây hoa trắng : 1 cây hoa đỏ : 1 cây hoa vàng.", ans: true }, // Vd: AaBbDd x aabbdd -> 1/8 đỏ : 1/8 vàng : 6/8 trắng
+                    { text: "Cho cây hoa trắng thuần chủng giao phấn với cây hoa vàng thuần chủng, luôn thu được đời con gồm toàn cây hoa vàng.", ans: false } // Vd: aabbDD (trắng) x AABBdd (vàng) -> AaBbDd (100% đỏ)
+                ]
+            },
+            {
+                id: "tf_7", type: "tf", origNum: "Câu 7 (Đ/S)", hasImage: true,
+                q: "Ở một loài thực vật, màu sắc hoa là do sự tác động của hai cặp gene (A, a và B, b) phân li độc lập. Gene A và gene B tác động đến sự hình thành màu sắc hoa theo sơ đồ:\n[Sơ đồ chuyển hóa: Chất 1 (không màu) → Chất 2 (không màu) → Sắc tố đỏ]\nCác allele a và b không có chức năng trên. Cho các cây dị hợp về 2 cặp gene tự thụ phấn thu được F<sub>1</sub>. Theo lí thuyết, mỗi nhận định dưới đây là đúng hay sai?",
+                items: [
+                    { text: "Trong số các cây hoa đỏ ở F<sub>1</sub> thì cây thuần chủng chiếm tỉ lệ 1/9.", ans: true },
+                    { text: "Các cây hoa trắng ở F<sub>1</sub> chiếm tỉ lệ 7/9.", ans: false }, // 7/16
+                    { text: "Tỉ lệ số cây hoa đỏ thuần chủng luôn lớn hơn số cây hoa trắng thuần chủng.", ans: false }, // Đỏ TC (1/16) < Trắng TC (3/16)
+                    { text: "Chọn ngẫu nhiên một cây hoa trắng ở F<sub>1</sub>; xác suất lấy được cây thuần chủng là 1/4.", ans: false } // 3/7
+                ]
+            },
+            {
+                id: "tf_21", type: "tf", origNum: "Câu 21 (Đ/S)",
+                q: "Một loài thực vật, allele A quy định thân cao trội hoàn toàn so với allele a quy định thân thấp; allele B quy định hoa đỏ trội không hoàn toàn so với allele b quy định hoa trắng, kiểu gene Bb quy định hoa hồng; hai cặp gene này phân li độc lập. Cho cây thân cao, hoa trắng giao phấn với cây thân thấp, hoa đỏ (P), thu được F<sub>1</sub> gồm 100% cây thân cao, hoa hồng. Cho F<sub>1</sub> tự thụ phấn, thu được F<sub>2</sub>. Biết rằng không xảy ra đột biến. Theo lí thuyết, mỗi phát biểu dưới đây đúng hay sai?",
+                items: [
+                    { text: "F<sub>2</sub> có 1 loại kiểu gene quy định kiểu hình thân cao, hoa hồng.", ans: false }, // 2 loại: AABb, AaBb
+                    { text: "Trong tổng số cây thân cao, hoa đỏ ở F<sub>2</sub>, số cây thuần chủng chiếm 25%.", ans: false }, // AABB / (AABB + AaBB) = 1/3 = 33,33%
+                    { text: "F<sub>2</sub> có 18,75% số cây thân cao, hoa trắng.", ans: true }, // 3/4 * 1/4 = 3/16 = 18,75%
+                    { text: "F<sub>2</sub> có 12,5% số cây thân thấp, hoa hồng.", ans: true } // 1/4 * 2/4 = 2/16 = 12,5%
+                ]
+            },
+            {
+                id: "tf_24", type: "tf", origNum: "Câu 24 (Đ/S)",
+                q: "Ở một loài thực vật lưỡng bội, xét 2 cặp gene (A, a; B, b) phân li độc lập cùng quy định màu sắc hoa. Kiểu gene có cả hai loại allele trội A và B cho kiểu hình hoa đỏ, kiểu gene chỉ có một loại allele trội A cho kiểu hình hoa vàng, các kiểu gene còn lại cho kiểu hình hoa trắng. Cho cây hoa đỏ (P) tự thụ phấn, thu được F<sub>1</sub> gồm 3 loại kiểu hình. Biết rằng không xảy ra đột biến, sự biểu hiện của gene không phụ thuộc vào môi trường. Theo lí thuyết, mỗi kết luận dưới đây đúng hay sai?",
+                items: [
+                    { text: "Số cây hoa trắng có kiểu gene dị hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true }, // P: AaBb -> hoa trắng: 1/16 aaBB, 2/16 aaBb, 1/16 aabb -> dị hợp = 2/16 = 12,5%
+                    { text: "Số cây hoa trắng có kiểu gene đồng hợp tử ở F<sub>1</sub> chiếm 12,5%.", ans: true }, // aaBB (1/16) + aabb (1/16) = 2/16 = 12,5%
+                    { text: "F<sub>1</sub> có 4 loại kiểu gene quy định kiểu hình hoa trắng.", ans: false }, // 3 loại kiểu gene: aaBB, aaBb, aabb
+                    { text: "Trong các cây hoa trắng ở F<sub>1</sub>, cây hoa trắng đồng hợp tử chiếm 25%.", ans: false } // 2/4 = 50%
+                ]
+            },
+            {
+                id: "tf_g16", type: "tf", origNum: "Câu 16 (Đ/S - GT)",
+                q: "Mỗi phát biểu sau đây về nhiễm sắc thể giới tính là đúng hay sai?",
+                items: [
+                    { text: "Nhiễm sắc thể giới tính chỉ tồn tại trong tế bào sinh dục, không tồn tại trong tế bào xôma.", ans: false },
+                    { text: "Trên nhiễm sắc thể giới tính, ngoài các gene quy định tính đực, cái còn có gene quy định các tính trạng thường.", ans: true },
+                    { text: "Ở tất cả các loài động vật, nhiễm sắc thể giới tính chỉ gồm một cặp tương đồng, giống nhau giữa giới đực và giới cái.", ans: false },
+                    { text: "Hợp tử mang cặp nhiễm sắc thể giới tính dị giao bao giờ cũng phát triển thành cơ thể đực.", ans: false }
+                ]
+            },
+            {
+                id: "tf_g55", type: "tf", origNum: "Câu 55 (Đ/S - GT)",
+                q: "Ở gà, gene quy định màu sắc lông nằm trên vùng không tương đồng của nhiễm sắc thể giới tính X (ở chim: trống XX, mái XY) có hai allele: allele A quy định lông vàng trội hoàn toàn so với allele a quy định lông đen. Cho gà trống lông vàng thuần chủng giao phối với gà mái lông đen thu được F<sub>1</sub>. Cho F<sub>1</sub> giao phối với nhau thu được F<sub>2</sub>. Theo lí thuyết, mỗi kết luận dưới đây về kiểu gene và kiểu hình ở F<sub>2</sub> đúng hay sai?",
+                items: [
+                    { text: "Gà trống lông vàng có tỉ lệ gấp đôi gà mái lông đen.", ans: true }, // F2: 1 XAXA : 1 XAXa (2/4 trống vàng) : 1 XAY (1/4 mái vàng) : 1 XaY (1/4 mái đen)
+                    { text: "Gà trống lông vàng có tỉ lệ gấp đôi gà mái lông vàng.", ans: true },
+                    { text: "Tất cả các gà lông đen đều là gà mái.", ans: true },
+                    { text: "Gà lông vàng và gà lông đen có tỉ lệ bằng nhau.", ans: false } // 3 vàng : 1 đen
+                ]
+            },
 
-        <div class="navigation">
-            <button class="btn-secondary" id="btn-prev" onclick="prevQuestion()">❮ Câu trước</button>
-            <button class="btn-secondary" id="btn-next" onclick="nextQuestion()">Câu tiếp ❯</button>
-        </div>
-    </div>
+            // ================= PHẦN III: TRẢ LỜI NGẮN =================
+            {
+                id: "sa_1", type: "sa", origNum: "Câu 1 (TLN)",
+                q: "Trong thí nghiệm lai một cặp tính trạng của Mendel, nếu cho tất cả các cây hoa đỏ F<sub>2</sub> giao phấn ngẫu nhiên với nhau thì tỉ lệ kiểu hình hoa trắng ở F<sub>3</sub> được dự đoán là bao nhiêu? Hãy thể hiện kết quả bằng số thập phân và làm tròn đến 2 chữ số sau dấu phẩy.",
+                ans: ["0,11", "0.11"]
+            },
+            {
+                id: "sa_2", type: "sa", origNum: "Câu 2 (TLN)",
+                q: "Cho lúa hạt tròn lai với lúa hạt dài, F<sub>1</sub> 100% lúa hạt dài. Cho F<sub>1</sub> tự thụ phấn được F<sub>2</sub>. Trong số lúa hạt dài F<sub>2</sub>, tính theo lí thuyết thì số cây hạt dài khi tự thụ phấn cho F<sub>3</sub> không có sự phân tính (hoặc thuần chủng; lưu ý file gốc ghi đáp án 0,33 tương ứng 1/3) chiếm tỉ lệ bao nhiêu? Hãy thể hiện kết quả bằng số thập phân và làm tròn đến 2 chữ số sau dấu phẩy.",
+                ans: ["0,33", "0.33", "1/3"]
+            },
+            {
+                id: "sa_3", type: "sa", origNum: "Câu 3 (TLN)",
+                q: "Một loài thực vật, allele A quy định hoa đỏ trội hoàn toàn so với allele a quy định hoa trắng. Phép lai P: Cây hoa đỏ × Cây hoa đỏ, thu được F<sub>1</sub> gồm toàn cây hoa đỏ. Cho các cây F<sub>1</sub> giao phấn ngẫu nhiên, thu được F<sub>2</sub> có cả cây hoa đỏ và cây hoa trắng. Theo lí thuyết, tỉ lệ kiểu hình hoa trắng ở F<sub>2</sub> là bao nhiêu phần trăm? Hãy thể hiện kết quả bằng số thập phân và làm tròn đến 2 chữ số sau dấu phẩy.",
+                ans: ["6,25", "6.25"]
+            },
+            {
+                id: "sa_4", type: "sa", origNum: "Câu 4 (TLN)",
+                q: "Xét 2 cặp allele A, a và B, b nằm trên 2 cặp nhiễm sắc thể thường khác nhau. Hãy cho biết có thể có bao nhiêu kiểu gene khác nhau trong quần thể?",
+                ans: ["9"]
+            },
+            {
+                id: "sa_5", type: "sa", origNum: "Câu 5 (TLN)",
+                q: "Phép lai P: AabbDdEe × AabbDdEe có thể hình thành ở thế hệ F<sub>1</sub> bao nhiêu loại kiểu gene?",
+                ans: ["27"]
+            }
+        ];
 
-    <!-- ==================== CHẾ ĐỘ TOÀN BỘ ==================== -->
-    <div id="mode-all" style="display: none;">
-        <div id="all-questions-list">
-            <!-- Render bằng JS -->
-        </div>
+        // State ứng dụng
+        let questions = JSON.parse(JSON.stringify(RAW_QUESTIONS));
+        let mode = "practice"; // 'practice' | 'exam'
+        let currentFilter = "all";
+        let userAnswers = {}; // { qId: value }
+        let checkedState = {}; // { qId: boolean }
+        let flaggedState = {}; // { qId: boolean }
+        let examSubmitted = false;
 
-        <div class="global-actions">
-            <button class="btn-primary" onclick="checkAll()">📝 Kiểm tra tất cả</button>
-            <button class="btn-warning" onclick="revealAll()">👁️ Mở toàn bộ đáp án</button>
-        </div>
-    </div>
-</div>
+        // Timer state
+        let timerSeconds = 45 * 60;
+        let timerInterval = null;
+        let timerPaused = false;
 
-<script>
-    // Dữ liệu câu hỏi
-    let DATA = [
-        { question: "Một gene ở sinh vật nhân thực dài 408nm và gồm 3200 liên kết H. Gene này bị đột biến thay thế 1 cặp A – T bằng 1 cặp G- C. Số nu loại T của gene sau đột biến là bao nhiêu?", answer: "399" },
-        { question: "Gene A dài 306 nm, có 20% nucleotide loại Adenine. Gene A bị đột biến thành allele a. Allele a bị đột biến thành Allele a1. Allele a1 bị đột biến thành Allele a2. Cho biết đột biến chỉ liên quan đến 1 cặp nucleotide. Số liên kết hydrogen của gene A ít hơn so với allele a là 1, nhiều hơn so với số liên kết hydrogen của allele a1 là 2 và nhiều hơn so với allele a2 là 1. Tính tổng số nucleotide loại G của cơ thể mang kiểu gene Aaa1a2?", answer: "2162" },
-        { question: "Ở 1 loài động vật, xét 1 gene trên NST thường có 2 Allele, Allele A trội hoàn toàn so với Allele đột biến a. Giả sử ở 1 phép lai, trong trong số giao tử đực, giao tử mang Allele a chiếm 5%. Trong tổng số giao tử cái, giao tử mang allele a chiếm 10%. Theo lí thuyết, trong tổng số cá thể mang allele đột biến ở đời con, thể đột biến chiếm tỉ lệ bao nhiêu %?", answer: "3,45" },
-        { question: "Ở 1 sinh vật nhân sơ, đoạn đầu gene cấu trúc có trình tự các nu trên mạch bổ sung là:<br><br><strong>5’ …ATG  TCC  TAC  TCT  ATT  CTA  GCG  GTC  AAT ..3’</strong><br><br>Tác nhân đột biến làm mất cặp nu thứ 16 G - C thì phân tử protein tương ứng được tổng hợp từ gene đột biến có số amino acid là bao nhiêu?", answer: "4" },
-        { question: `Cho biết các codon mã hóa một số loại amino acid như sau:
-            <table>
-                <tr>
-                    <td class="table-header">Codon</td>
-                    <td>5’GAU3’; 5’GAC3’</td>
-                    <td>5’UAU3’; 5’UAC3’</td>
-                    <td>5’AGU3’; 5’AGC3’</td>
-                    <td>5’CAU3’; 5’CAC3’</td>
-                </tr>
-                <tr>
-                    <td class="table-header">Amino acid</td>
-                    <td>Asp</td>
-                    <td>Tyr</td>
-                    <td>Ser</td>
-                    <td>His</td>
-                </tr>
-            </table>
-            Một đoạn mạch làm khuôn tổng hợp mRNA của Allele M có trình tự nucleotide là 3’TAC CTA GTA ATG TCA…ATC5’. Allele M bị đột biến điểm tạo ra 4 Allele có trình tự nucleotide ở đoạn mạch này như sau:<br><br>
-            <strong>Allele M1:</strong> 3’TAC CTG GTA ATG TCA…ATC5’.<br>
-            <strong>Allele M2:</strong> 3’TAC CTA GTG ATG TCA…ATC5’.<br>
-            <strong>Allele M3:</strong> 3’TAC CTA GTA GTG TCA…ATC5’.<br>
-            <strong>Allele M4:</strong> 3’TAC CTA GTA ATG TCG…ATC5’.<br><br>
-            Theo lý thuyết, trong 4 Allele trên, có bao nhiêu Allele mã hóa chuỗi polipeptide có thành phần amino acid bị thay đổi so với chuỗi polipeptide do Allele M mã hóa?`, answer: "1" },
-        { question: "Đường kính của mỗi chromatid là bao nhiêu?", answer: "700" },
-        { question: "Mỗi nucleosome gồm bao nhiêu phân tử protein dạng histon?", answer: "8" },
-        { question: "Mỗi nucleosome quấn quanh một phân tử DNA gồm bao nhiêu cặp nucleotide?", answer: "146" },
-        { question: "Bộ NST lưỡng bội của loài được kí hiệu là gì?", answer: "2n" },
-        { question: "Mỗi phân tử protein condensin II và condensin I có khả năng gây co xoắn ở sợi nhiễm sắc có đường kính bao nhiêu?", answer: "10 nm" }
-    ];
-
-    // ==========================================
-    // LOGIC CHUNG
-    // ==========================================
-    function normalizeText(text) {
-        return text.trim().toLowerCase().replace(/\s+/g, '').replace(/,/g, '.');
-    }
-
-    function checkLogic(userAns, correctAns) {
-        if (userAns.trim() === "") return "empty";
-        const normUser = normalizeText(userAns);
-        const normCorrect = normalizeText(correctAns);
-        if (normUser === normCorrect || normCorrect.startsWith(normUser + 'nm')) return "correct";
-        return "incorrect";
-    }
-
-    function switchMode(mode) {
-        document.getElementById('tab-single').classList.toggle('active', mode === 'single');
-        document.getElementById('tab-all').classList.toggle('active', mode === 'all');
-        
-        document.getElementById('mode-single').style.display = mode === 'single' ? 'block' : 'none';
-        document.getElementById('mode-all').style.display = mode === 'all' ? 'block' : 'none';
-    }
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
-    function shuffleQuestions() {
-        if (confirm("Việc đảo câu hỏi sẽ làm mới lại toàn bộ quá trình làm bài hiện tại. Bạn có chắc chắn muốn tiếp tục?")) {
-            shuffleArray(DATA);
-            currentIndex = 0;
-            renderSingle();
+        function init() {
             renderAll();
         }
-    }
 
-    // ==========================================
-    // LOGIC CHẾ ĐỘ TỪNG CÂU
-    // ==========================================
-    let currentIndex = 0;
+        // Chuyển đổi chế độ
+        function setMode(newMode) {
+            mode = newMode;
+            document.getElementById("btnModePractice").classList.toggle("active", mode === "practice");
+            document.getElementById("btnModeExam").classList.toggle("active", mode === "exam");
+            document.getElementById("timerBox").style.display = mode === "exam" ? "block" : "none";
 
-    function renderSingle() {
-        const q = DATA[currentIndex];
-        document.getElementById('single-counter').innerText = `Câu ${currentIndex + 1} / ${DATA.length}`;
-        document.getElementById('single-text').innerHTML = q.question;
-        
-        // Khôi phục trạng thái mặc định của ô input
-        const input = document.getElementById('single-input');
-        input.value = '';
-        input.disabled = false;
-        input.style.backgroundColor = ""; 
-        
-        document.getElementById('single-feedback').style.display = 'none';
-        
-        document.getElementById('btn-prev').disabled = (currentIndex === 0);
-        document.getElementById('btn-next').disabled = (currentIndex === DATA.length - 1);
-    }
-
-    function checkSingle() {
-        const userAns = document.getElementById('single-input').value;
-        const correctAns = DATA[currentIndex].answer;
-        const feedback = document.getElementById('single-feedback');
-        
-        const status = checkLogic(userAns, correctAns);
-
-        if (status === "empty") {
-            feedback.className = "feedback incorrect";
-            feedback.innerHTML = "⚠️ Vui lòng nhập đáp án của bạn!";
-        } else if (status === "correct") {
-            feedback.className = "feedback correct";
-            feedback.innerHTML = `✅ Chính xác! Đáp án đúng là <b>${correctAns}</b>`;
-        } else {
-            feedback.className = "feedback incorrect";
-            feedback.innerHTML = `❌ Chưa chính xác.`;
-        }
-        feedback.style.display = "block";
-    }
-
-    function revealSingle() {
-        const q = DATA[currentIndex];
-        const input = document.getElementById('single-input');
-        const feedback = document.getElementById('single-feedback');
-
-        // Hiển thị đáp án trực tiếp vào ô input và đổi màu
-        input.value = q.answer;
-        input.style.backgroundColor = "#fef9c3";
-        input.disabled = true; // Khóa ô nhập
-
-        feedback.className = "feedback revealed";
-        feedback.innerHTML = `👁️ Đáp án: <b>${q.answer}</b>`;
-        feedback.style.display = "block";
-    }
-
-    function nextQuestion() {
-        if (currentIndex < DATA.length - 1) { currentIndex++; renderSingle(); }
-    }
-    function prevQuestion() {
-        if (currentIndex > 0) { currentIndex--; renderSingle(); }
-    }
-    document.getElementById("single-input").addEventListener("keypress", e => {
-        if (e.key === "Enter") checkSingle();
-    });
-
-    // ==========================================
-    // LOGIC CHẾ ĐỘ TOÀN BỘ
-    // ==========================================
-    function renderAll() {
-        const list = document.getElementById('all-questions-list');
-        list.innerHTML = "";
-        
-        DATA.forEach((q, index) => {
-            list.innerHTML += `
-                <div class="q-item">
-                    <div class="q-number">Câu ${index + 1}</div>
-                    <div class="q-text">${q.question}</div>
-                    <div style="display:flex; gap:10px;">
-                        <input type="text" id="all-input-${index}" placeholder="Nhập đáp án...">
-                    </div>
-                    <div class="feedback" id="all-feedback-${index}"></div>
-                </div>
-            `;
-        });
-    }
-
-    function checkAll() {
-        DATA.forEach((q, index) => {
-            const input = document.getElementById(`all-input-${index}`);
-            const feedback = document.getElementById(`all-feedback-${index}`);
-            const status = checkLogic(input.value, q.answer);
-
-            if (status === "empty") {
-                feedback.style.display = "none"; 
-            } else if (status === "correct") {
-                feedback.className = "feedback correct";
-                feedback.innerHTML = `✅ Chính xác!`;
-                feedback.style.display = "block";
+            if (mode === "exam") {
+                resetAll(false);
+                startTimer();
             } else {
-                feedback.className = "feedback incorrect";
-                feedback.innerHTML = `❌ Sai. Đáp án đúng là: <b>${q.answer}</b>`;
-                feedback.style.display = "block";
+                stopTimer();
+                renderAll();
             }
-        });
-    }
+        }
 
-    function revealAll() {
-        if(confirm("Bạn có chắc chắn muốn xem toàn bộ đáp án? Các câu chưa làm sẽ hiển thị đáp án.")) {
-            DATA.forEach((q, index) => {
-                const input = document.getElementById(`all-input-${index}`);
-                const feedback = document.getElementById(`all-feedback-${index}`);
-                
-                input.value = q.answer;
-                input.style.backgroundColor = "#fef9c3";
-                input.disabled = true;
+        // Bộ đếm thời gian
+        function startTimer() {
+            stopTimer();
+            timerPaused = false;
+            document.getElementById("btnPauseTimer").textContent = "Tạm dừng";
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                if (!timerPaused && !examSubmitted) {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerDisplay();
+                    } else {
+                        stopTimer();
+                        alert("Hết giờ làm bài! Hệ thống sẽ tự động nộp bài.");
+                        submitExam();
+                    }
+                }
+            }, 1000);
+        }
 
-                feedback.className = "feedback revealed";
-                feedback.innerHTML = `👁️ Đáp án: <b>${q.answer}</b>`;
-                feedback.style.display = "block";
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = null;
+        }
+
+        function setTimerMinutes(mins) {
+            timerSeconds = mins * 60;
+            updateTimerDisplay();
+        }
+
+        function togglePauseTimer() {
+            timerPaused = !timerPaused;
+            document.getElementById("btnPauseTimer").textContent = timerPaused ? "Tiếp tục" : "Tạm dừng";
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timerSeconds / 60).toString().padStart(2, "0");
+            const s = (timerSeconds % 60).toString().padStart(2, "0");
+            document.getElementById("timerDisplay").textContent = `${m}:${s}`;
+        }
+
+        // Xáo trộn câu hỏi trong từng phần
+        function shuffleQuestions() {
+            const mcqs = questions.filter(q => q.type === "mcq").sort(() => Math.random() - 0.5);
+            const tfs = questions.filter(q => q.type === "tf").sort(() => Math.random() - 0.5);
+            const sas = questions.filter(q => q.type === "sa").sort(() => Math.random() - 0.5);
+            questions = [...mcqs, ...tfs, ...sas];
+            renderAll();
+        }
+
+        // Xáo trộn thứ tự đáp án A,B,C,D và ý a,b,c,d
+        function shuffleOptions() {
+            questions.forEach(q => {
+                if (q.type === "mcq") {
+                    const correctText = q.opts[q.ans];
+                    q.opts = [...q.opts].sort(() => Math.random() - 0.5);
+                    q.ans = q.opts.indexOf(correctText);
+                    delete userAnswers[q.id];
+                    delete checkedState[q.id];
+                } else if (q.type === "tf") {
+                    q.items = [...q.items].sort(() => Math.random() - 0.5);
+                    delete userAnswers[q.id];
+                    delete checkedState[q.id];
+                }
+            });
+            examSubmitted = false;
+            document.getElementById("resultBanner").style.display = "none";
+            renderAll();
+        }
+
+        function resetAll(confirmAsk = true) {
+            if (confirmAsk && !confirm("Bạn muốn xóa toàn bộ bài làm hiện tại để làm lại?")) return;
+            userAnswers = {};
+            checkedState = {};
+            flaggedState = {};
+            examSubmitted = false;
+            document.getElementById("resultBanner").style.display = "none";
+            if (mode === "exam") {
+                timerSeconds = 45 * 60;
+                startTimer();
+            }
+            renderAll();
+        }
+
+        function filterPart(part, btn) {
+            currentFilter = part;
+            document.querySelectorAll(".part-tab").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            renderQuestions();
+        }
+
+        function toggleFlag(qId) {
+            flaggedState[qId] = !flaggedState[qId];
+            renderAll();
+        }
+
+        // Cập nhật đường dẫn tương đối cho ảnh
+        function updateRelImage(val) {
+            IMAGE_REL_PATH = val.trim();
+            const imgEl = document.getElementById("customDiagramImg");
+            if (imgEl) {
+                if (IMAGE_REL_PATH) {
+                    imgEl.src = IMAGE_REL_PATH;
+                    imgEl.style.display = "block";
+                } else {
+                    imgEl.style.display = "none";
+                }
+            }
+        }
+
+        // Xử lý chọn đáp án
+        function selectMcq(qId, idx) {
+            if (examSubmitted) return;
+            userAnswers[qId] = idx;
+            if (mode === "practice") {
+                checkedState[qId] = true;
+            }
+            renderAll();
+        }
+
+        function selectTf(qId, itemIdx, val) {
+            if (examSubmitted) return;
+            if (!userAnswers[qId]) userAnswers[qId] = {};
+            userAnswers[qId][itemIdx] = val;
+            renderSidebar();
+        }
+
+        function checkTfPractice(qId) {
+            checkedState[qId] = true;
+            renderAll();
+        }
+
+        function inputSa(qId, val) {
+            if (examSubmitted) return;
+            userAnswers[qId] = val;
+            renderSidebar();
+        }
+
+        function checkSaPractice(qId) {
+            checkedState[qId] = true;
+            renderAll();
+        }
+
+        // Kiểm tra đúng sai từng câu
+        function evaluateQuestion(q) {
+            const ans = userAnswers[q.id];
+            if (q.type === "mcq") {
+                if (ans === undefined) return { answered: false, isCorrect: false };
+                return { answered: true, isCorrect: ans === q.ans };
+            }
+            if (q.type === "tf") {
+                if (!ans || Object.keys(ans).length === 0) return { answered: false, isCorrect: false, correctCount: 0 };
+                let correctCount = 0;
+                q.items.forEach((it, i) => {
+                    if (ans[i] === it.ans) correctCount++;
+                });
+                return {
+                    answered: Object.keys(ans).length === q.items.length,
+                    partialAnswered: Object.keys(ans).length > 0,
+                    isCorrect: correctCount === q.items.length,
+                    correctCount
+                };
+            }
+            if (q.type === "sa") {
+                if (!ans || ans.trim() === "") return { answered: false, isCorrect: false };
+                const norm = ans.trim().replace(/\s+/g, "").replace(".", ",");
+                const ok = q.ans.some(a => a.replace(".", ",") === norm);
+                return { answered: true, isCorrect: ok };
+            }
+        }
+
+        // Nộp toàn bộ bài
+        function submitExam() {
+            examSubmitted = true;
+            stopTimer();
+            questions.forEach(q => checkedState[q.id] = true);
+
+            let mcqOk = 0, mcqTotal = 0;
+            let tfScore = 0, tfTotal = 0;
+            let saOk = 0, saTotal = 0;
+
+            questions.forEach(q => {
+                const ev = evaluateQuestion(q);
+                if (q.type === "mcq") {
+                    mcqTotal++;
+                    if (ev.isCorrect) mcqOk++;
+                } else if (q.type === "tf") {
+                    tfTotal++;
+                    // Thang điểm chuẩn 2025: 1 ý đúng = 0.1đ, 2 ý = 0.25đ, 3 ý = 0.5đ, 4 ý = 1.0đ
+                    const c = ev.correctCount || 0;
+                    if (c === 1) tfScore += 0.1;
+                    else if (c === 2) tfScore += 0.25;
+                    else if (c === 3) tfScore += 0.5;
+                    else if (c === 4) tfScore += 1.0;
+                } else if (q.type === "sa") {
+                    saTotal++;
+                    if (ev.isCorrect) saOk++;
+                }
+            });
+
+            const banner = document.getElementById("resultBanner");
+            banner.style.display = "block";
+            banner.innerHTML = `
+    <h2>🎉 Kết quả bài làm</h2>
+    <p><strong>Phần I (Trắc nghiệm):</strong> Đúng <b>${mcqOk}/${mcqTotal}</b> câu</p>
+    <p><strong>Phần II (Đúng/Sai - thang điểm chuẩn):</strong> Đạt <b>${tfScore.toFixed(2)}/${tfTotal.toFixed(2)}</b> điểm</p>
+    <p><strong>Phần III (Trả lời ngắn):</strong> Đúng <b>${saOk}/${saTotal}</b> câu</p>
+  `;
+            renderAll();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function renderAll() {
+            renderQuestions();
+            renderSidebar();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById("quizContainer");
+            container.innerHTML = "";
+
+            const letters = ["A", "B", "C", "D"];
+            const subLetters = ["a", "b", "c", "d"];
+
+            let mcqIdx = 0, tfIdx = 0, saIdx = 0;
+
+            questions.forEach(q => {
+                let displayIndex = "";
+                if (q.type === "mcq") { mcqIdx++; displayIndex = `Phần I - Câu ${mcqIdx}`; }
+                if (q.type === "tf") { tfIdx++; displayIndex = `Phần II - Câu ${tfIdx}`; }
+                if (q.type === "sa") { saIdx++; displayIndex = `Phần III - Câu ${saIdx}`; }
+
+                if (currentFilter !== "all" && q.type !== currentFilter) return;
+
+                const showResult = examSubmitted || (mode === "practice" && checkedState[q.id]);
+                const ev = evaluateQuestion(q);
+
+                const card = document.createElement("div");
+                card.className = "q-card";
+                card.id = `card_${q.id}`;
+
+                let bodyHtml = "";
+
+                // Nếu là câu có hình ảnh (Câu 7 Đúng/Sai)
+                if (q.hasImage) {
+                    bodyHtml += `
+        <div class="img-box">
+          <div style="font-size:0.85rem; color:#4b5563; font-weight:600;">🖼️ Khu vực hiển thị hình sơ đồ (dán relative link vào ô bên dưới):</div>
+          <img id="customDiagramImg" src="${IMAGE_REL_PATH}" alt="Sơ đồ chuyển hóa" style="display:${IMAGE_REL_PATH ? 'block' : 'none'};" onerror="this.style.display='none'">
+          <div class="img-input-row">
+            <input type="text" id="relImgInput" value="${IMAGE_REL_PATH}" placeholder="Ví dụ: ./sodo.png hoặc images/cau7.jpg">
+            <button type="button" class="btn-primary" onclick="updateRelImage(document.getElementById('relImgInput').value)">Cập nhật ảnh</button>
+          </div>
+        </div>
+      `;
+                }
+
+                if (q.type === "mcq") {
+                    bodyHtml += `<div class="options-grid">`;
+                    q.opts.forEach((opt, i) => {
+                        let cls = "opt-item";
+                        const isSelected = userAnswers[q.id] === i;
+                        if (showResult) {
+                            if (i === q.ans) cls += " correct";
+                            else if (isSelected && i !== q.ans) cls += " wrong";
+                        } else if (isSelected) {
+                            cls += " selected";
+                        }
+                        bodyHtml += `
+          <div class="${cls}" onclick="selectMcq('${q.id}', ${i})">
+            <span class="opt-label">${letters[i]}.</span>
+            <span>${opt}</span>
+          </div>
+        `;
+                    });
+                    bodyHtml += `</div>`;
+                    if (showResult) {
+                        bodyHtml += `<div class="q-footer">
+          <span class="feedback-msg ${ev.isCorrect ? 'ok' : 'err'}">
+            ${ev.isCorrect ? '✓ Chính xác!' : `✗ Chưa đúng. Đáp án đúng là: ${letters[q.ans]}`}
+          </span>
+        </div>`;
+                    }
+                } else if (q.type === "tf") {
+                    const ansObj = userAnswers[q.id] || {};
+                    bodyHtml += `
+        <table class="tf-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Mệnh đề</th>
+              <th>Đúng</th>
+              <th>Sai</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+                    q.items.forEach((it, i) => {
+                        let rowCls = "tf-row";
+                        if (showResult) {
+                            if (ansObj[i] === it.ans) rowCls += " correct";
+                            else rowCls += " wrong";
+                        }
+                        bodyHtml += `
+          <tr class="${rowCls}">
+            <td><strong>${subLetters[i]})</strong> ${it.text} ${showResult ? `<span style="font-size:0.82rem; font-weight:700; color:#059669;">[Đáp án: ${it.ans ? 'Đúng' : 'Sai'}]</span>` : ''}</td>
+            <td><input type="radio" class="tf-radio" name="${q.id}_${i}" ${ansObj[i] === true ? 'checked' : ''} ${examSubmitted ? 'disabled' : ''} onchange="selectTf('${q.id}', ${i}, true)"></td>
+            <td><input type="radio" class="tf-radio" name="${q.id}_${i}" ${ansObj[i] === false ? 'checked' : ''} ${examSubmitted ? 'disabled' : ''} onchange="selectTf('${q.id}', ${i}, false)"></td>
+          </tr>
+        `;
+                    });
+                    bodyHtml += `</tbody></table>`;
+                    bodyHtml += `<div class="q-footer">`;
+                    if (mode === "practice" && !showResult) {
+                        bodyHtml += `<button class="btn-primary" onclick="checkTfPractice('${q.id}')">Kiểm tra đáp án</button>`;
+                    } else if (showResult) {
+                        bodyHtml += `<span class="feedback-msg ${ev.isCorrect ? 'ok' : 'err'}">Đúng ${ev.correctCount || 0}/4 ý</span>`;
+                    }
+                    bodyHtml += `</div>`;
+                } else if (q.type === "sa") {
+                    const val = userAnswers[q.id] || "";
+                    let inpCls = "sa-input";
+                    if (showResult) inpCls += ev.isCorrect ? " correct" : " wrong";
+                    bodyHtml += `
+        <div class="sa-box">
+          <input type="text" class="${inpCls}" value="${val}" placeholder="Nhập đáp án..." ${examSubmitted ? 'disabled' : ''} oninput="inputSa('${q.id}', this.value)">
+          ${mode === "practice" && !showResult ? `<button class="btn-primary" onclick="checkSaPractice('${q.id}')">Kiểm tra</button>` : ''}
+        </div>
+      `;
+                    if (showResult) {
+                        bodyHtml += `<div class="q-footer">
+          <span class="feedback-msg ${ev.isCorrect ? 'ok' : 'err'}">
+            ${ev.isCorrect ? '✓ Chính xác!' : `✗ Đáp án đúng là: ${q.ans[0]}`}
+          </span>
+        </div>`;
+                    }
+                }
+
+                card.innerHTML = `
+      <div class="q-header">
+        <span class="q-badge">${displayIndex} <span style="font-weight:400; color:#6b7280;">(${q.origNum})</span></span>
+        <button class="flag-btn ${flaggedState[q.id] ? 'flagged' : ''}" onclick="toggleFlag('${q.id}')">
+          ${flaggedState[q.id] ? '🚩 Đã đánh dấu' : '🏳️ Đánh dấu'}
+        </button>
+      </div>
+      <div class="q-text">${q.q}</div>
+      ${bodyHtml}
+    `;
+                container.appendChild(card);
             });
         }
-    }
 
-    // Khởi tạo
-    renderSingle();
-    renderAll();
-</script>
+        function renderSidebar() {
+            const navMcq = document.getElementById("navMcq");
+            const navTf = document.getElementById("navTf");
+            const navSa = document.getElementById("navSa");
+            navMcq.innerHTML = "";
+            navTf.innerHTML = "";
+            navSa.innerHTML = "";
 
+            let cMcq = 0, cTf = 0, cSa = 0, totalDone = 0;
+
+            questions.forEach(q => {
+                const ev = evaluateQuestion(q);
+                const isDone = q.type === "tf" ? ev.partialAnswered : ev.answered;
+                if (isDone) totalDone++;
+
+                const showResult = examSubmitted || (mode === "practice" && checkedState[q.id]);
+                let cls = "nav-btn";
+                if (showResult && isDone) {
+                    cls += ev.isCorrect ? " ok" : " no";
+                } else if (isDone) {
+                    cls += " done";
+                }
+                if (flaggedState[q.id]) cls += " flagged";
+
+                const btn = document.createElement("button");
+                btn.className = cls;
+
+                if (q.type === "mcq") {
+                    cMcq++;
+                    btn.textContent = cMcq;
+                    btn.onclick = () => scrollToQuestion(q.id, "mcq");
+                    navMcq.appendChild(btn);
+                } else if (q.type === "tf") {
+                    cTf++;
+                    btn.textContent = cTf;
+                    btn.onclick = () => scrollToQuestion(q.id, "tf");
+                    navTf.appendChild(btn);
+                } else if (q.type === "sa") {
+                    cSa++;
+                    btn.textContent = cSa;
+                    btn.onclick = () => scrollToQuestion(q.id, "sa");
+                    navSa.appendChild(btn);
+                }
+            });
+
+            document.getElementById("cntAll").textContent = questions.length;
+            document.getElementById("cntMcq").textContent = cMcq;
+            document.getElementById("cntTf").textContent = cTf;
+            document.getElementById("cntSa").textContent = cSa;
+            document.getElementById("progressText").textContent = `${totalDone}/${questions.length} câu`;
+        }
+
+        function scrollToQuestion(qId, type) {
+            if (currentFilter !== "all" && currentFilter !== type) {
+                currentFilter = "all";
+                document.querySelectorAll(".part-tab").forEach((b, i) => b.classList.toggle("active", i === 0));
+                renderQuestions();
+            }
+            const el = document.getElementById(`card_${qId}`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        init();
+    </script>
 </body>
 </html>
